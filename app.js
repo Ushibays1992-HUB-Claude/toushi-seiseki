@@ -39,7 +39,10 @@ const pct = (v) => (Number.isFinite(v) ? `${v > 0 ? "+" : v < 0 ? "−" : "±"}$
 const tone = (v) => (v > 0.5 ? "gain" : v < -0.5 ? "loss" : "");
 const money = (v) => `<span class="${tone(v)}">${signed(v)}</span>`;
 const unitOf = (kind) => (kind === "fund" ? 10000 : 1);
-const fmtDate = (d) => d.replaceAll("-", "/");
+const fmtDate = (d) => (d ? d.replaceAll("-", "/") : "—");
+const isHeld = (r) => r.held ?? r.endQty > 0;
+const rowKey = (r) => r.key || r.code || r.name;
+const KIND_TAG = { fund: "投信", foreign: "海外株" };
 const addDays = (iso, n) => {
   const d = new Date(`${iso}T00:00:00Z`);
   d.setUTCDate(d.getUTCDate() + n);
@@ -366,11 +369,12 @@ function holdingsTable(rows, opts) {
 
 /** 保有中の株式・保有中の投資信託・売却済み（保有ゼロ）に分けた銘柄別の成績 */
 function holdingsSections(rows, title, opts) {
-  const held = rows.filter((r) => r.endQty > 0);
-  const sold = rows.filter((r) => !(r.endQty > 0)).map((r) => ({ ...r, tag: r.kind === "fund" ? "投信" : "" }));
+  const held = rows.filter(isHeld);
+  const sold = rows.filter((r) => !isHeld(r)).map((r) => ({ ...r, tag: KIND_TAG[r.kind] ?? "" }));
   const groups = [
-    ["株式", held.filter((r) => r.kind !== "fund"), ""],
+    ["株式", held.filter((r) => r.kind === "stock" || !r.kind), ""],
     ["投資信託", held.filter((r) => r.kind === "fund"), ""],
+    ["海外株", held.filter((r) => r.kind === "foreign"), ""],
     ["売却済み", sold, opts.soldNote ?? ""],
   ];
   return groups.filter(([, g]) => g.length).map(([label, g, note]) =>
@@ -404,7 +408,7 @@ function tradeTable(trades, readonly = false) {
       <td class="num" style="text-align:left">${fmtDate(t.date)}</td>
       <td class="nowrap">${TYPE_LABEL[t.type]}<span class="tag opt">${esc(t.account)}</span>${t.auto ? '<span class="tag auto">自動</span>' : ""}</td>
       ${nameCell(t.code, t.name, t.note ? `<span class="tag" title="${esc(t.note)}">${t.note.includes("推定") || t.note.includes("逆算") ? "推定" : "注記"}</span>` : "")}
-      <td class="n">${t.type === "split" ? `1→${esc(t.ratio)}` : num(t.qty)}</td>
+      <td class="n">${t.type === "split" ? `1→${esc(t.ratio)}` : t.qty != null ? num(t.qty) : "—"}</td>
       <td class="n opt">${t.price ? Number(t.price).toLocaleString("ja-JP") : "—"}</td>
       <td class="n">${t.amount ? num(t.amount) : "—"}</td>
       ${admin ? `<td class="n">${t.id ? `<button class="btn link small" data-act="trade-del" data-id="${t.id}">削除</button>` : ""}${t.auto ? `<button class="btn link small" data-act="plan-skip" data-id="${t.planId}" data-month="${t.month}">この月を取消</button>` : ""}</td>` : ""}
@@ -493,10 +497,17 @@ function renderTotal() {
   for (const r of reports) {
     for (const k of ["buy", "sell", "div", "perf", "price"]) total[k] += r.total[k];
     for (const row of r.rows) {
-      const b = (byCode[row.code] ??= { ...row, start: 0, end: 0, buy: 0, sell: 0, div: 0, perf: 0, flags: [] });
+      const b = (byCode[rowKey(row)] ??= { ...row, start: 0, end: 0, buy: 0, sell: 0, div: 0, perf: 0, flags: [] });
       for (const k of ["buy", "sell", "div", "perf"]) b[k] += row[k];
-      b.endQty = row.endQty;
+      b.name = row.name;
     }
+  }
+  // 保有中かどうかは最新の年で判断する
+  const latestRows = new Map((reports[reports.length - 1]?.rows ?? []).map((row) => [rowKey(row), row]));
+  for (const [key, b] of Object.entries(byCode)) {
+    const now = latestRows.get(key);
+    b.held = !!now && isHeld(now);
+    b.endQty = b.held ? now.endQty : 0;
   }
   total.rate = total.perf / (total.start + total.buy);
   const latest = reports[reports.length - 1]?.total;
