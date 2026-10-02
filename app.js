@@ -332,7 +332,7 @@ function holdingsTable(rows, opts) {
   const unit = (r) => (r.kind === "fund" ? "口" : "株");
   const tradeCell = (r) => [r.buy ? `買 ${num(r.buy)}` : "", r.sell ? `売 ${num(r.sell)}` : ""].filter(Boolean).join(" / ") || "—";
   const tr = rows.map((r) => `<tr>
-      ${nameCell(r.code, r.name, r.flags.map((f) => `<span class="warn-mark">${esc(f)}</span>`).join(""))}
+      ${nameCell(r.code, r.name, `${r.tag ? `<span class="tag">${r.tag}</span>` : ""}${r.flags.map((f) => `<span class="warn-mark">${esc(f)}</span>`).join("")}`)}
       <td class="n opt">${r.endQty ? `${num(r.endQty)}${unit(r)}` : "—"}</td>
       ${opts.values ? `<td class="n opt">${r.start ? num(r.start) : "—"}</td><td class="n">${r.end ? num(r.end) : "—"}</td>` : ""}
       <td class="n opt">${tradeCell(r)}</td>
@@ -347,11 +347,17 @@ function holdingsTable(rows, opts) {
   </table></div>`;
 }
 
-/** 株式と投資信託に分けた銘柄別の成績 */
+/** 保有中の株式・保有中の投資信託・売却済み（保有ゼロ）に分けた銘柄別の成績 */
 function holdingsSections(rows, title, opts) {
-  const groups = [["株式", rows.filter((r) => r.kind !== "fund")], ["投資信託", rows.filter((r) => r.kind === "fund")]];
-  return groups.filter(([, g]) => g.length).map(([label, g]) =>
-    `<section class="card"><h2>${title}（${label}）</h2>${holdingsTable(g, opts)}</section>`).join("");
+  const held = rows.filter((r) => r.endQty > 0);
+  const sold = rows.filter((r) => !(r.endQty > 0)).map((r) => ({ ...r, tag: r.kind === "fund" ? "投信" : "" }));
+  const groups = [
+    ["株式", held.filter((r) => r.kind !== "fund"), ""],
+    ["投資信託", held.filter((r) => r.kind === "fund"), ""],
+    ["売却済み", sold, opts.soldNote ?? ""],
+  ];
+  return groups.filter(([, g]) => g.length).map(([label, g, note]) =>
+    `<section class="card"><h2>${title}（${label}）${note ? ` <small>${note}</small>` : ""}</h2>${holdingsTable(g, { ...opts, sold: label === "売却済み" })}</section>`).join("");
 }
 
 function dividendTable(divs) {
@@ -417,7 +423,7 @@ function renderYear(year) {
   return `
     ${heroCard(`${year}年の成績${r.isCurrent ? `（${fmtDate(r.endCut)} 時点）` : ""}`, t,
       `${extra}${statTile("今年の買付・売却", `買 ${yen(t.buy)}`, `売 ${yen(t.sell)}`)}`)}
-    ${holdingsSections(r.rows, "銘柄別の成績", { values: true, endLabel: r.isCurrent ? "現在評価額" : "年末評価額" })}
+    ${holdingsSections(r.rows, "銘柄別の成績", { values: true, endLabel: r.isCurrent ? "現在評価額" : "年末評価額", soldNote: r.isCurrent ? "現在は保有していない銘柄" : "年末時点で保有していない銘柄" })}
     <section class="card"><h2>売買履歴</h2>${tradeTable(r.trades)}</section>
     <section class="card"><h2>配当金 <small>NISA口座は非課税、特定・一般口座は税引後</small></h2>${dividendTable(r.divs)}</section>
     ${r.isCurrent && (state.plans.length || state.user) ? `<section class="card"><h2>積立設定 <small>毎月の買付を自動で売買履歴に計上します</small></h2>${planCard()}</section>` : ""}`;
@@ -487,7 +493,7 @@ function renderTotal() {
     <section class="card"><h2>年ごとの成績</h2><div class="table-wrap"><table>
       <thead><tr><th>年</th><th class="n opt">年初評価額</th><th class="n">年末(現在)評価額</th><th class="n opt">配当金</th><th class="n">利回り</th><th class="n">成績</th></tr></thead>
       <tbody>${yearRows}</tbody></table></div></section>
-    ${holdingsSections(Object.values(byCode).sort((a, b) => b.perf - a.perf), "銘柄別の通算成績", { values: false })}`;
+    ${holdingsSections(Object.values(byCode).sort((a, b) => b.perf - a.perf), "銘柄別の通算成績", { values: false, soldNote: "現在は保有していない銘柄" })}`;
 }
 
 function renderAuth() {
