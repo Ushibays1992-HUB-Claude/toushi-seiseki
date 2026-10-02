@@ -135,10 +135,13 @@ def fetch_fund(code, isin):
     raise ValueError(f"no price source for fund {code}")
 
 
-def accept_price(code, new, old_market):
-    """前回の採用価格から大きく動いた値はすぐには採用しない（Yahooの一時的な異常値対策）。"""
+def accept_price(code, new, old_market, split_dates=()):
+    """前回の採用価格から大きく動いた値はすぐには採用しない（Yahooの一時的な異常値対策）。
+    ただし、その間に株式分割が登録されていれば分割による値動きなので、すぐに採用する。"""
     old = old_market.get("prices", {}).get(code)
     if not old or old.get("date") == new["date"] and not old.get("pending"):
+        return {**new, "suspect": False}
+    if any(old["date"] < d <= new["date"] for d in split_dates):
         return {**new, "suspect": False}
     ratio = new["price"] / old["price"] - 1
     if abs(ratio) <= JUMP_LIMIT:
@@ -172,8 +175,10 @@ def merge_dividends(store, code, events):
 
 def main():
     trades = load_trades()
-    securities = {}
+    securities, splits = {}, {}
     for t in trades:
+        if t.get("type") == "split":
+            splits.setdefault(t["code"], []).append(t["date"])
         sec = securities.setdefault(t["code"], {"kind": t.get("kind", "stock"), "isin": None})
         sec["isin"] = sec["isin"] or t.get("isin") or FUND_ISIN.get(t["code"])
 
@@ -192,7 +197,7 @@ def main():
             if code in old_market.get("prices", {}):
                 prices[code] = old_market["prices"][code]
             continue
-        p = accept_price(code, new, old_market)
+        p = accept_price(code, new, old_market, splits.get(code, ()))
         prices[code] = p
         print(f"{code}: {p['price']} ({p['date']}){' SUSPECT' if p['suspect'] else ''}")
         if not p["suspect"]:

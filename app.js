@@ -178,13 +178,18 @@ function lastTradePrice(code) {
 }
 
 /** 年末（今年は最新）の価格。取れない場合は直近の約定単価で代用 */
-function priceAt(code, year) {
+function priceAt(code, year, cutoff) {
   const ye = state.yearend[year]?.[code];
-  if (ye) return { price: ye.price, date: ye.date };
   const m = state.market.prices?.[code];
-  if (year === curYear() && m) return { price: m.price, date: m.date };
-  const p = lastTradePrice(code);
-  return p ? { price: p, date: null, fallback: true } : null;
+  const p = ye ? { price: ye.price, date: ye.date }
+    : year === curYear() && m ? { price: m.price, date: m.date }
+    : lastTradePrice(code) ? { price: lastTradePrice(code), date: null, fallback: true } : null;
+  if (!p?.date) return p;
+  // 価格の日付より後に株式分割があれば、分割後の株数に合わせて価格を割る（分割直後で株価がまだ更新されていない場合）
+  const factor = state.trades
+    .filter((t) => t.type === "split" && t.code === code && t.date > p.date && t.date <= cutoff)
+    .reduce((f, t) => f * (Number(t.ratio) || 1), 1);
+  return factor === 1 ? p : { ...p, price: p.price / factor, splitAdjusted: true };
 }
 
 function dividendEvents(year, endCut) {
@@ -240,20 +245,22 @@ function yearReport(year) {
     r.startQty = sumQty(h0[code]);
     r.endQty = sumQty(h1[code]);
     if (r.startQty > 0) {
-      const p = priceAt(code, year - 1);
+      const p = priceAt(code, year - 1, `${year - 1}-12-31`);
       if (!p) r.flags.push("年初価格なし");
       r.start = r.startQty * (p?.price ?? 0) / u;
     }
     if (r.endQty > 0) {
-      const p = priceAt(code, year);
+      const p = priceAt(code, year, endCut);
       if (!p) r.flags.push("価格なし");
       else if (p.fallback) r.flags.push("価格未取得");
+      else if (p.splitAdjusted) r.flags.push("分割調整中");
       r.end = r.endQty * (p?.price ?? 0) / u;
       r.endPrice = p?.price;
       const m = state.market.prices?.[code];
       if (isCurrent && m) {
-        if (m.suspect) r.flags.push("価格要確認");
-        if (m.prevClose) r.dayChange = r.endQty * (m.price - m.prevClose) / u;
+        if (m.suspect && !p?.splitAdjusted) r.flags.push("価格要確認");
+        // 分割をまたぐ前日比は意味がないので計算しない
+        if (m.prevClose && !p?.splitAdjusted && Math.abs(m.price / m.prevClose - 1) <= 0.3) r.dayChange = r.endQty * (m.price - m.prevClose) / u;
       }
     }
   }
