@@ -1,0 +1,408 @@
+{
+ "baseYear": 2026,
+ "trades": [
+  {
+   "date": "2025-12-31",
+   "type": "opening",
+   "code": "2432",
+   "name": "ディー・エヌ・エー",
+   "kind": "stock",
+   "account": "NISA成長",
+   "qty": 100
+  },
+  {
+   "date": "2025-12-31",
+   "type": "opening",
+   "code": "9202",
+   "name": "ANAホールディングス",
+   "kind": "stock",
+   "account": "NISA成長",
+   "qty": 100
+  },
+  {
+   "date": "2025-12-31",
+   "type": "opening",
+   "code": "1489",
+   "name": "NF 日経高配当50",
+   "kind": "stock",
+   "account": "NISA成長",
+   "qty": 650
+  },
+  {
+   "date": "2025-12-31",
+   "type": "opening",
+   "code": "1497",
+   "name": "iS 米ドルHY社債(ヘッジあり)",
+   "kind": "stock",
+   "account": "NISA成長",
+   "qty": 150
+  },
+  {
+   "date": "2025-12-31",
+   "type": "opening",
+   "code": "1658",
+   "name": "iS コアMSCI新興国株",
+   "kind": "stock",
+   "account": "NISA成長",
+   "qty": 40
+  },
+  {
+   "date": "2025-12-31",
+   "type": "opening",
+   "code": "2563",
+   "name": "iS S&P500(ヘッジあり)",
+   "kind": "stock",
+   "account": "NISA成長",
+   "qty": 900
+  },
+  {
+   "date": "2025-12-31",
+   "type": "opening",
+   "code": "1326",
+   "name": "SPDRゴールド・シェア",
+   "kind": "stock",
+   "account": "NISA成長",
+   "qty": 10
+  },
+  {
+   "date": "2025-12-31",
+   "type": "opening",
+   "code": "1681",
+   "name": "上場インデックス 海外新興国株式",
+   "kind": "stock",
+   "account": "NISA成長",
+   "qty": 30
+  },
+  {
+   "date": "2025-12-31",
+   "type": "opening",
+   "code": "2515",
+   "name": "NF 外国REIT(ヘッジなし)",
+   "kind": "stock",
+   "account": "NISA成長",
+   "qty": 350
+  },
+  {
+   "date": "2025-12-31",
+   "type": "opening",
+   "code": "2845",
+   "name": "NF NASDAQ-100(ヘッジあり)",
+   "kind": "stock",
+   "account": "NISA成長",
+   "qty": 150
+  },
+  {
+   "date": "2025-12-31",
+   "type": "opening",
+   "code": "1681",
+   "name": "上場インデックス 海外新興国株式",
+   "kind": "stock",
+   "account": "旧NISA",
+   "qty": 130
+  },
+  {
+   "date": "2025-12-31",
+   "type": "opening",
+   "code": "1306",
+   "name": "NF TOPIX",
+   "kind": "stock",
+   "account": "旧NISA",
+   "qty": 500
+  },
+  {
+   "date": "2025-12-31",
+   "type": "opening",
+   "code": "1489",
+   "name": "NF 日経高配当50",
+   "kind": "stock",
+   "account": "旧NISA",
+   "qty": 120
+  },
+  {
+   "date": "2025-12-31",
+   "type": "opening",
+   "code": "2515",
+   "name": "NF 外国REIT(ヘッジなし)",
+   "kind": "stock",
+   "account": "旧NISA",
+   "qty": 120
+  },
+  {
+   "date": "2025-12-31",
+   "type": "opening",
+   "code": "1658",
+   "name": "iS コアMSCI新興国株",
+   "kind": "stock",
+   "account": "旧NISA",
+   "qty": 50
+  },
+  {
+   "date": "2025-12-31",
+   "type": "opening",
+   "code": "2563",
+   "name": "iS S&P500(ヘッジあり)",
+   "kind": "stock",
+   "account": "旧NISA",
+   "qty": 280
+  },
+  {
+   "date": "2025-12-31",
+   "type": "opening",
+   "code": "2562",
+   "name": "上場インデックス 米国ダウ(ヘッジあり)",
+   "kind": "stock",
+   "account": "旧NISA",
+   "qty": 30
+  },
+  {
+   "date": "2025-12-31",
+   "type": "opening",
+   "code": "2529",
+   "name": "NF 野村株主還元70",
+   "kind": "stock",
+   "account": "旧NISA",
+   "qty": 45
+  },
+  {
+   "date": "2025-12-31",
+   "type": "opening",
+   "code": "1497",
+   "name": "iS 米ドルHY社債(ヘッジあり)",
+   "kind": "stock",
+   "account": "旧NISA",
+   "qty": 20
+  },
+  {
+   "date": "2025-12-31",
+   "type": "opening",
+   "code": "2633",
+   "name": "NF S&P500(ヘッジなし)",
+   "kind": "stock",
+   "account": "旧NISA",
+   "qty": 200
+  },
+  {
+   "date": "2025-12-31",
+   "type": "opening",
+   "code": "2559",
+   "name": "MAXIS 全世界株式",
+   "kind": "stock",
+   "account": "旧NISA",
+   "qty": 34
+  },
+  {
+   "date": "2025-12-31",
+   "type": "opening",
+   "code": "1545",
+   "name": "NF NASDAQ-100(ヘッジなし)",
+   "kind": "stock",
+   "account": "旧NISA",
+   "qty": 12
+  },
+  {
+   "date": "2025-12-31",
+   "type": "opening",
+   "code": "0331418A",
+   "name": "eMAXIS Slim 全世界株式(オール・カントリー)",
+   "kind": "fund",
+   "account": "NISAつみたて",
+   "qty": 911924
+  },
+  {
+   "date": "2026-01-21",
+   "type": "buy",
+   "code": "0331418A",
+   "name": "eMAXIS Slim 全世界株式(オール・カントリー)",
+   "kind": "fund",
+   "account": "NISAつみたて",
+   "qty": 29609,
+   "price": 33774,
+   "amount": 100000
+  },
+  {
+   "date": "2026-02-24",
+   "type": "buy",
+   "code": "0331418A",
+   "name": "eMAXIS Slim 全世界株式(オール・カントリー)",
+   "kind": "fund",
+   "account": "NISAつみたて",
+   "qty": 29512,
+   "price": 33885,
+   "amount": 100000
+  },
+  {
+   "date": "2026-03-18",
+   "type": "buy",
+   "code": "0331418A",
+   "name": "eMAXIS Slim 全世界株式(オール・カントリー)",
+   "kind": "fund",
+   "account": "NISAつみたて",
+   "qty": 29569,
+   "price": 33820,
+   "amount": 100000
+  },
+  {
+   "date": "2026-04-20",
+   "type": "buy",
+   "code": "0331418A",
+   "name": "eMAXIS Slim 全世界株式(オール・カントリー)",
+   "kind": "fund",
+   "account": "NISAつみたて",
+   "qty": 27921,
+   "price": 35816,
+   "amount": 100000
+  },
+  {
+   "date": "2026-05-19",
+   "type": "buy",
+   "code": "0331418A",
+   "name": "eMAXIS Slim 全世界株式(オール・カントリー)",
+   "kind": "fund",
+   "account": "NISAつみたて",
+   "qty": 27229,
+   "price": 36726,
+   "amount": 100000
+  },
+  {
+   "date": "2026-06-18",
+   "type": "buy",
+   "code": "0331418A",
+   "name": "eMAXIS Slim 全世界株式(オール・カントリー)",
+   "kind": "fund",
+   "account": "NISAつみたて",
+   "qty": 26381,
+   "price": 37907,
+   "amount": 100000
+  },
+  {
+   "date": "2026-07-21",
+   "type": "buy",
+   "code": "0331418A",
+   "name": "eMAXIS Slim 全世界株式(オール・カントリー)",
+   "kind": "fund",
+   "account": "NISAつみたて",
+   "qty": 26377,
+   "price": 37913,
+   "amount": 100000
+  },
+  {
+   "date": "2026-08-18",
+   "type": "buy",
+   "code": "0331418A",
+   "name": "eMAXIS Slim 全世界株式(オール・カントリー)",
+   "kind": "fund",
+   "account": "NISAつみたて",
+   "qty": 25728,
+   "price": 38868,
+   "amount": 100000
+  },
+  {
+   "date": "2026-09-18",
+   "type": "buy",
+   "code": "0331418A",
+   "name": "eMAXIS Slim 全世界株式(オール・カントリー)",
+   "kind": "fund",
+   "account": "NISAつみたて",
+   "qty": 26644,
+   "price": 37532,
+   "amount": 100000
+  },
+  {
+   "date": "2026-03-04",
+   "type": "buy",
+   "code": "1326",
+   "name": "SPDRゴールド・シェア",
+   "kind": "stock",
+   "account": "NISA成長",
+   "qty": 3,
+   "price": 74670,
+   "amount": 224010
+  },
+  {
+   "date": "2026-03-30",
+   "type": "buy",
+   "code": "2845",
+   "name": "NF NASDAQ-100(ヘッジあり)",
+   "kind": "stock",
+   "account": "NISA成長",
+   "qty": 70,
+   "price": 2801,
+   "amount": 196070
+  },
+  {
+   "date": "2026-05-22",
+   "type": "split",
+   "code": "1545",
+   "name": "NF NASDAQ-100(ヘッジなし)",
+   "kind": "stock",
+   "account": "旧NISA",
+   "qty": 0,
+   "ratio": 200
+  },
+  {
+   "date": "2026-06-05",
+   "type": "split",
+   "code": "2559",
+   "name": "MAXIS 全世界株式",
+   "kind": "stock",
+   "account": "旧NISA",
+   "qty": 0,
+   "ratio": 10
+  },
+  {
+   "date": "2026-07-30",
+   "type": "buy",
+   "code": "1326",
+   "name": "SPDRゴールド・シェア",
+   "kind": "stock",
+   "account": "NISA成長",
+   "qty": 1,
+   "price": 60670,
+   "amount": 60670
+  },
+  {
+   "date": "2026-07-30",
+   "type": "buy",
+   "code": "1658",
+   "name": "iS コアMSCI新興国株",
+   "kind": "stock",
+   "account": "NISA成長",
+   "qty": 15,
+   "price": 4134,
+   "amount": 62010
+  },
+  {
+   "date": "2026-07-30",
+   "type": "buy",
+   "code": "2515",
+   "name": "NF 外国REIT(ヘッジなし)",
+   "kind": "stock",
+   "account": "NISA成長",
+   "qty": 50,
+   "price": 1794,
+   "amount": 89700
+  },
+  {
+   "date": "2026-09-08",
+   "type": "buy",
+   "code": "618A",
+   "name": "KOMPEITO",
+   "kind": "stock",
+   "account": "特定",
+   "qty": 100,
+   "price": 1600,
+   "amount": 160000
+  },
+  {
+   "date": "2026-09-11",
+   "type": "sell",
+   "code": "618A",
+   "name": "KOMPEITO",
+   "kind": "stock",
+   "account": "特定",
+   "qty": 100,
+   "price": 1480,
+   "amount": 148000
+  }
+ ]
+}

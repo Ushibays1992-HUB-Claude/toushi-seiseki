@@ -1,0 +1,113 @@
+{
+ "updatedAt": "2026-10-02T13:35+09:00",
+ "prices": {
+  "2432": {
+   "price": 2516.5,
+   "date": "2026-10-02",
+   "prevClose": 2556.5,
+   "suspect": false
+  },
+  "9202": {
+   "price": 2926.5,
+   "date": "2026-10-02",
+   "prevClose": 2971.0,
+   "suspect": false
+  },
+  "1489": {
+   "price": 3483.0,
+   "date": "2026-10-02",
+   "prevClose": 3529.0,
+   "suspect": false
+  },
+  "1497": {
+   "price": 1685.0,
+   "date": "2026-10-02",
+   "prevClose": 1686.0,
+   "suspect": false
+  },
+  "1658": {
+   "price": 4317.0,
+   "date": "2026-10-02",
+   "prevClose": 4366.0,
+   "suspect": false
+  },
+  "2563": {
+   "price": 404.8,
+   "date": "2026-10-02",
+   "prevClose": 405.8,
+   "suspect": false
+  },
+  "1326": {
+   "price": 60600.0,
+   "date": "2026-10-02",
+   "prevClose": 60060.0,
+   "suspect": false
+  },
+  "1681": {
+   "price": 3351.0,
+   "date": "2026-10-02",
+   "prevClose": 3386.0,
+   "suspect": false
+  },
+  "2515": {
+   "price": 1535.0,
+   "date": "2026-10-02",
+   "prevClose": 1545.0,
+   "suspect": false
+  },
+  "2845": {
+   "price": 3669.0,
+   "date": "2026-10-02",
+   "prevClose": 3699.0,
+   "suspect": false
+  },
+  "1306": {
+   "price": 430.5,
+   "date": "2026-10-02",
+   "prevClose": 434.4,
+   "suspect": false
+  },
+  "2562": {
+   "price": 3542.0,
+   "date": "2026-10-02",
+   "prevClose": 3541.0,
+   "suspect": false
+  },
+  "2529": {
+   "price": 2363.0,
+   "date": "2026-10-02",
+   "prevClose": 2375.0,
+   "suspect": false
+  },
+  "2633": {
+   "price": 559.3,
+   "date": "2026-10-02",
+   "prevClose": 562.4,
+   "suspect": false
+  },
+  "2559": {
+   "price": 2954.0,
+   "date": "2026-10-02",
+   "prevClose": 2972.0,
+   "suspect": false
+  },
+  "1545": {
+   "price": 244.1,
+   "date": "2026-10-02",
+   "prevClose": 246.5,
+   "suspect": false
+  },
+  "0331418A": {
+   "price": 37855,
+   "date": "2026-10-01",
+   "prevClose": 37791,
+   "suspect": false
+  },
+  "618A": {
+   "price": 1984.0,
+   "date": "2026-10-02",
+   "prevClose": 1872.0,
+   "suspect": false
+  }
+ }
+}

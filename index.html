@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>投資成績管理</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header class="top">
+  <div class="top-inner">
+    <div>
+      <h1>投資成績管理</h1>
+      <p class="updated" id="updated">読み込み中…</p>
+    </div>
+    <div class="auth" id="auth"></div>
+  </div>
+  <nav class="tabs" id="tabs" aria-label="表示する期間"></nav>
+</header>
+<div class="notice" id="notice" hidden></div>
+<main id="app"></main>
+<footer class="foot">
+  株価：Yahoo!ファイナンス／基準価額：三菱UFJアセットマネジメント（毎日自動更新）。
+  成績＝年末（現在）評価額 − 年初評価額 − 買付額 ＋ 売却額 ＋ 配当金。配当金は基準日の年で計上。
+</footer>
+<script type="module" src="app.js"></script>
+</body>
+</html>
