@@ -56,7 +56,8 @@ function sortedTrades() {
 
 function securities() {
   const map = {};
-  for (const t of sortedTrades()) map[t.code] = { name: t.name, kind: t.kind || "stock" };
+  // 銘柄名が空欄の売買は、それまでに登録された銘柄名を引き継ぐ
+  for (const t of sortedTrades()) map[t.code] = { name: t.name || map[t.code]?.name || t.code, kind: t.kind || "stock" };
   return map;
 }
 
@@ -252,6 +253,7 @@ function dividendTable(divs) {
 }
 
 function tradeTable(trades) {
+  const sec = securities();
   const admin = !!state.user;
   const form = admin ? tradeForm() : "";
   if (!trades.length) return `${form}<p class="empty">この年の売買はありません</p>`;
@@ -260,7 +262,7 @@ function tradeTable(trades) {
     <tbody>${trades.slice().reverse().map((t) => `<tr>
       <td class="num" style="text-align:left">${fmtDate(t.date)}</td>
       <td>${TYPE_LABEL[t.type]}<span class="tag">${esc(t.account)}</span></td>
-      <td class="name">${esc(t.name)}<span class="sub">${esc(t.code)}</span></td>
+      <td class="name">${esc(t.name || sec[t.code]?.name)}<span class="sub">${esc(t.code)}</span></td>
       <td class="n">${t.type === "split" ? `1→${esc(t.ratio)}` : Number(t.qty).toLocaleString("ja-JP")}</td>
       <td class="n opt">${t.price ? Number(t.price).toLocaleString("ja-JP") : "—"}</td>
       <td class="n">${t.amount ? yen(t.amount) : "—"}</td>
@@ -276,7 +278,7 @@ function tradeForm() {
     <label>種別<select name="type"><option value="buy">買付</option><option value="sell">売却</option><option value="split">株式分割</option></select></label>
     <label>銘柄コード<input name="code" list="codes" required placeholder="例: 2432"></label>
     <datalist id="codes">${Object.entries(sec).map(([c, s]) => `<option value="${esc(c)}">${esc(s.name)}</option>`).join("")}</datalist>
-    <label>銘柄名<input name="name" required></label>
+    <label>銘柄名（登録済みの銘柄は空欄可）<input name="name"></label>
     <label>商品<select name="kind"><option value="stock">株式・ETF</option><option value="fund">投資信託</option></select></label>
     <label>口座<select name="account">${ACCOUNTS.map((a) => `<option>${a}</option>`).join("")}</select></label>
     <label data-for="qty">数量<input type="number" name="qty" min="0" step="any"></label>
@@ -383,7 +385,8 @@ function bindForm() {
   };
   form.code.addEventListener("change", () => {
     const s = sec[form.code.value.trim()];
-    if (s) { form.name.value = s.name; form.kind.value = s.kind; }
+    form.name.placeholder = s ? `空欄なら「${s.name}」` : "新規銘柄は必須";
+    if (s) form.kind.value = s.kind;
     const last = sortedTrades().filter((t) => t.code === form.code.value.trim() && t.account).pop();
     if (last) form.account.value = last.account;
     show();
@@ -407,6 +410,7 @@ function bindForm() {
       t.amount = Number(f.amount);
       if (!t.qty || !t.amount) return alert("数量と受渡金額を入力してください");
     }
+    if (!t.name && !sec[t.code]) return alert("新規の銘柄は銘柄名を入力してください");
     if (f.isin) t.isin = f.isin.trim();
     await write(() => state.fb.addTrade(t));
   });
