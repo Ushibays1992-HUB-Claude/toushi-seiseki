@@ -15,6 +15,11 @@ const state = {
   dividends: {},
   seed: [],
   trades: [],
+  plans: [],
+  autoTrades: [],
+  planStatus: {},
+  navs: {},
+  holidaysJP: new Set(),
   overrides: {},
   user: null,
   view: "total",
@@ -49,9 +54,97 @@ async function getJSON(path, fallback) {
   }
 }
 
+// ---------- 積立の自動計上 ----------
+const pad2 = (n) => String(n).padStart(2, "0");
+const ymd = (y, m, d) => `${y}-${pad2(m)}-${pad2(d)}`;
+const dow = (iso) => new Date(`${iso}T00:00:00Z`).getUTCDay();
+const daysInMonth = (y, m) => new Date(Date.UTC(y, m, 0)).getUTCDate();
+
+/** m月の第n曜日（n=-1で最終） */
+function nthWeekday(y, m, wd, n) {
+  if (n > 0) return ymd(y, m, 1 + ((wd - dow(ymd(y, m, 1)) + 7) % 7) + (n - 1) * 7);
+  const last = daysInMonth(y, m);
+  return ymd(y, m, last - ((dow(ymd(y, m, last)) - wd + 7) % 7));
+}
+
+/** 土曜→金曜、日曜→月曜の振替 */
+const observed = (iso) => (dow(iso) === 6 ? addDays(iso, -1) : dow(iso) === 0 ? addDays(iso, 1) : iso);
+
+function easter(y) {
+  const a = y % 19, b = Math.floor(y / 100), c = y % 100, d = Math.floor(b / 4), e = b % 4;
+  const f = Math.floor((b + 8) / 25), g = Math.floor((b - f + 1) / 3), h = (19 * a + b - d - g + 15) % 30;
+  const i = Math.floor(c / 4), k = c % 4, l = (32 + 2 * e + 2 * i - h - k) % 7, m = Math.floor((a + 11 * h + 22 * l) / 451);
+  const month = Math.floor((h + l - 7 * m + 114) / 31);
+  return ymd(y, month, ((h + l - 7 * m + 114) % 31) + 1);
+}
+
+/** ニューヨークの取引所・銀行の休業日（海外資産の投信は申込不可日になる） */
+const usHolidayCache = {};
+function usHolidays(y) {
+  return (usHolidayCache[y] ??= new Set([
+    observed(ymd(y, 1, 1)), nthWeekday(y, 1, 1, 3), nthWeekday(y, 2, 1, 3), addDays(easter(y), -2),
+    nthWeekday(y, 5, 1, -1), observed(ymd(y, 6, 19)), observed(ymd(y, 7, 4)), nthWeekday(y, 9, 1, 1),
+    nthWeekday(y, 10, 1, 2), observed(ymd(y, 11, 11)), nthWeekday(y, 11, 4, 4), observed(ymd(y, 12, 25)),
+  ]));
+}
+
+function isFundBizDay(iso) {
+  const y = Number(iso.slice(0, 4));
+  if (dow(iso) === 0 || dow(iso) === 6) return false;
+  if (state.holidaysJP.has(iso) || ["12-31", "01-02", "01-03"].includes(iso.slice(5))) return false;
+  return !usHolidays(y).has(iso) && !usHolidays(y + 1).has(iso);
+}
+
+function bizOnOrAfter(iso) {
+  while (!isFundBizDay(iso)) iso = addDays(iso, 1);
+  return iso;
+}
+
+/** 積立設定から毎月の買付を作る。注文日（休日なら翌営業日）の翌営業日に、その日の基準価額で約定する */
+function generatePlanTrades() {
+  const today = todayJST();
+  const out = [];
+  state.planStatus = {};
+  for (const p of state.plans) {
+    const navs = state.navs[p.code] ?? {};
+    const manual = state.trades.filter((t) => t.code === p.code && t.type === "buy");
+    let [y, m] = p.start.split("-").map(Number);
+    for (let guard = 0; guard < 600 && `${y}-${pad2(m)}` <= (p.end || "9999-12"); guard++) {
+      const month = `${y}-${pad2(m)}`;
+      const order = bizOnOrAfter(ymd(y, m, Math.min(Number(p.day), daysInMonth(y, m))));
+      const exec = bizOnOrAfter(addDays(order, 1));
+      const skipped = (p.skips ?? []).includes(month);
+      // 同じ月に同額の買付を手入力している場合は二重計上しない
+      const dup = manual.some((t) => t.date.slice(0, 7) === exec.slice(0, 7) && Number(t.amount) === Number(p.amount));
+      if (!skipped && !dup) {
+        const nav = navs[exec];
+        if (exec > today || !nav) {
+          state.planStatus[p.id] = { month, order, exec };
+          break;
+        }
+        out.push({
+          date: exec, type: "buy", code: p.code, name: p.name, kind: "fund", account: p.account,
+          qty: Math.ceil(Number(p.amount) * unitOf("fund") / nav), price: nav, amount: Number(p.amount),
+          auto: true, planId: p.id, month,
+        });
+      }
+      if (++m > 12) { m = 1; y++; }
+    }
+  }
+  return out;
+}
+
+async function ensureNavs() {
+  const missing = [...new Set(state.plans.map((p) => p.code))].filter((c) => !state.navs[c]);
+  if (!missing.length) return;
+  const loaded = await Promise.all(missing.map((c) => getJSON(`data/navs/${c}.json`, {})));
+  missing.forEach((c, i) => { state.navs[c] = loaded[i]; });
+  render();
+}
+
 // ---------- calculation ----------
 function sortedTrades() {
-  return [...state.trades].sort((a, b) => a.date.localeCompare(b.date) || TYPE_ORDER[a.type] - TYPE_ORDER[b.type]);
+  return [...state.trades, ...state.autoTrades].sort((a, b) => a.date.localeCompare(b.date) || TYPE_ORDER[a.type] - TYPE_ORDER[b.type]);
 }
 
 function securities() {
@@ -259,12 +352,12 @@ function tradeTable(trades) {
     <thead><tr><th>約定日</th><th>種別</th><th>銘柄</th><th class="n">数量</th><th class="n opt">単価</th><th class="n">受渡金額</th>${admin ? "<th></th>" : ""}</tr></thead>
     <tbody>${trades.slice().reverse().map((t) => `<tr>
       <td class="num" style="text-align:left">${fmtDate(t.date)}</td>
-      <td>${TYPE_LABEL[t.type]}<span class="tag">${esc(t.account)}</span></td>
+      <td>${TYPE_LABEL[t.type]}<span class="tag">${esc(t.account)}</span>${t.auto ? '<span class="tag auto">自動（積立）</span>' : ""}</td>
       <td class="name">${esc(t.name)}<span class="sub">${esc(t.code)}</span></td>
       <td class="n">${t.type === "split" ? `1→${esc(t.ratio)}` : Number(t.qty).toLocaleString("ja-JP")}</td>
       <td class="n opt">${t.price ? Number(t.price).toLocaleString("ja-JP") : "—"}</td>
       <td class="n">${t.amount ? yen(t.amount) : "—"}</td>
-      ${admin ? `<td class="n">${t.id ? `<button class="btn link small" data-act="trade-del" data-id="${t.id}">削除</button>` : ""}</td>` : ""}
+      ${admin ? `<td class="n">${t.id ? `<button class="btn link small" data-act="trade-del" data-id="${t.id}">削除</button>` : ""}${t.auto ? `<button class="btn link small" data-act="plan-skip" data-id="${t.planId}" data-month="${t.month}">この月を取消</button>` : ""}</td>` : ""}
     </tr>`).join("")}</tbody>
   </table></div>`;
 }
@@ -300,7 +393,47 @@ function renderYear(year) {
     <section class="card"><h2>銘柄別の成績 <small>成績＝${r.isCurrent ? "現在" : "年末"}評価額−年初評価額−買付＋売却＋配当</small></h2>
       ${holdingsTable(r.rows, { values: true, qty: true, endLabel: r.isCurrent ? "現在評価額" : "年末評価額" })}</section>
     <section class="card"><h2>配当金 <small>NISA口座は非課税、特定・一般口座は税引後</small></h2>${dividendTable(r.divs)}</section>
+    ${r.isCurrent && (state.plans.length || state.user) ? `<section class="card"><h2>積立設定 <small>毎月の買付を自動で売買履歴に計上します</small></h2>${planCard()}</section>` : ""}
     <section class="card"><h2>売買履歴</h2>${tradeTable(r.trades)}</section>`;
+}
+
+function planCard() {
+  const admin = !!state.user;
+  const rows = state.plans.slice().sort((a, b) => a.start.localeCompare(b.start)).map((p) => {
+    const st = state.planStatus[p.id];
+    const next = st
+      ? `${fmtDate(st.order).slice(5)} 注文 → ${fmtDate(st.exec).slice(5)} 約定予定`
+      : p.end ? "終了" : "—";
+    const skips = (p.skips ?? []).sort().map((m) => `<span class="tag">${m.replace("-", "/")} 取消${admin ? ` <button class="btn link small" data-act="plan-unskip" data-id="${p.id}" data-month="${m}">戻す</button>` : ""}</span>`).join(" ");
+    return `<tr>
+      <td class="name">${esc(p.name)}<span class="sub">${esc(p.code)} ・ ${esc(p.account)}</span>${skips ? `<span class="sub">${skips}</span>` : ""}</td>
+      <td class="n">${yen(p.amount)}</td>
+      <td class="n opt">毎月${esc(p.day)}日</td>
+      <td class="n opt">${p.start.replace("-", "/")}〜${p.end ? p.end.replace("-", "/") : ""}</td>
+      <td class="n">${next}</td>
+      ${admin ? `<td class="n">${p.end ? "" : `<button class="btn small" data-act="plan-end" data-id="${p.id}">終了</button> `}<button class="btn link small" data-act="plan-del" data-id="${p.id}">削除</button></td>` : ""}
+    </tr>`;
+  }).join("");
+  const table = rows ? `<div class="table-wrap"><table>
+    <thead><tr><th>銘柄</th><th class="n">毎月の金額</th><th class="n opt">注文日</th><th class="n opt">期間</th><th class="n">次回</th>${admin ? "<th></th>" : ""}</tr></thead>
+    <tbody>${rows}</tbody></table></div>` : `<p class="empty">積立設定はまだありません</p>`;
+  return `${admin ? planForm() : ""}${table}`;
+}
+
+function planForm() {
+  const funds = Object.entries(securities()).filter(([, s]) => s.kind === "fund");
+  const [code, s] = funds[0] ?? ["", { name: "" }];
+  return `<form class="trade" id="plan-form">
+    <label>銘柄コード（協会コード）<input name="code" list="fund-codes" value="${esc(code)}" required></label>
+    <datalist id="fund-codes">${funds.map(([c, f]) => `<option value="${esc(c)}">${esc(f.name)}</option>`).join("")}</datalist>
+    <label>銘柄名<input name="name" value="${esc(s.name)}" required></label>
+    <label>口座<select name="account">${ACCOUNTS.map((a) => `<option${a === "NISAつみたて" ? " selected" : ""}>${a}</option>`).join("")}</select></label>
+    <label>毎月の金額（円）<input type="number" name="amount" min="1" value="100000" required></label>
+    <label>注文日（毎月）<input type="number" name="day" min="1" max="31" value="17" required></label>
+    <label>開始月<input type="month" name="start" value="${todayJST().slice(0, 7)}" required></label>
+    <label data-for="isin" hidden>ISINコード（新しい投信のみ）<input name="isin" placeholder="例: JP90C000H1T1"></label>
+    <div class="actions"><span class="muted" style="font-size:.78rem;margin-right:auto">金額や注文日を変えるときは、今の設定を「終了」してから新しく登録してください</span><button type="submit" class="btn primary">積立設定を登録</button></div>
+  </form>`;
 }
 
 function renderTotal() {
@@ -353,6 +486,7 @@ function renderNotice() {
 }
 
 function render() {
+  state.autoTrades = generatePlanTrades();
   renderTabs();
   renderAuth();
   renderNotice();
@@ -360,6 +494,7 @@ function render() {
   $("#updated").textContent = upd ? `価格更新：${upd.toLocaleString("ja-JP", { timeZone: "Asia/Tokyo", dateStyle: "medium", timeStyle: "short" })}` : "";
   $("#app").innerHTML = state.view === "total" ? renderTotal() : renderYear(Number(state.view));
   bindForm();
+  bindPlanForm();
 }
 
 // ---------- editing ----------
@@ -412,6 +547,30 @@ function bindForm() {
   });
 }
 
+function bindPlanForm() {
+  const form = $("#plan-form");
+  if (!form) return;
+  const sec = securities();
+  const sync = () => {
+    const s = sec[form.code.value.trim()];
+    if (s) form.name.value = s.name;
+    form.querySelector('[data-for="isin"]').hidden = !!s;
+  };
+  form.code.addEventListener("change", sync);
+  sync();
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const f = Object.fromEntries(new FormData(form));
+    const p = {
+      code: f.code.trim(), name: f.name.trim(), kind: "fund", account: f.account,
+      amount: Number(f.amount), day: Number(f.day), start: f.start,
+    };
+    if (f.isin) p.isin = f.isin.trim();
+    if (!sec[p.code] && !p.isin) return alert("新しい投信はISINコードを入力してください（基準価額の取得に使います）");
+    await write(() => state.fb.addPlan(p));
+  });
+}
+
 async function write(fn) {
   try {
     await fn();
@@ -447,6 +606,22 @@ document.addEventListener("click", async (e) => {
       return;
     }
     case "div-reset": return write(() => fb.deleteOverride(el.dataset.key));
+    case "plan-skip":
+      if (confirm(`${el.dataset.month.replace("-", "/")}の積立を取り消しますか？（SBIで積立が実行されなかった月に使います）`))
+        await write(() => fb.updatePlanSkip(el.dataset.id, el.dataset.month, true));
+      return;
+    case "plan-unskip": return write(() => fb.updatePlanSkip(el.dataset.id, el.dataset.month, false));
+    case "plan-end": {
+      const def = state.autoTrades.filter((t) => t.planId === el.dataset.id).pop()?.month ?? todayJST().slice(0, 7);
+      const v = prompt("最後に積み立てる月を入力してください（例: 2026-12）", def);
+      if (v && /^\d{4}-\d{2}$/.test(v)) await write(() => fb.updatePlan(el.dataset.id, { end: v }));
+      else if (v) alert("YYYY-MM の形式で入力してください");
+      return;
+    }
+    case "plan-del":
+      if (confirm("この積立設定を削除しますか？\nこの設定で自動計上した過去の買付もすべて消えます。積立をやめる場合は「終了」を使ってください。"))
+        await write(() => fb.deletePlan(el.dataset.id));
+      return;
   }
 });
 
@@ -465,6 +640,10 @@ async function initFirebase() {
     deleteTrade: (id) => fs.deleteDoc(fs.doc(db, "trades", id)),
     setOverride: (key, amount) => fs.setDoc(fs.doc(db, "divOverrides", key), { amount }),
     deleteOverride: (key) => fs.deleteDoc(fs.doc(db, "divOverrides", key)),
+    addPlan: (p) => fs.addDoc(fs.collection(db, "plans"), { ...p, skips: [], createdAt: fs.serverTimestamp() }),
+    updatePlan: (id, data) => fs.updateDoc(fs.doc(db, "plans", id), data),
+    updatePlanSkip: (id, month, add) => fs.updateDoc(fs.doc(db, "plans", id), { skips: add ? fs.arrayUnion(month) : fs.arrayRemove(month) }),
+    deletePlan: (id) => fs.deleteDoc(fs.doc(db, "plans", id)),
     importSeed: async (trades) => {
       const batch = fs.writeBatch(db);
       for (const t of trades) batch.set(fs.doc(fs.collection(db, "trades")), { ...t, createdAt: fs.serverTimestamp() });
@@ -476,6 +655,11 @@ async function initFirebase() {
     state.trades = snap.docs.map((d) => ({ id: d.id, ...d.data() }));
     render();
   });
+  fs.onSnapshot(fs.collection(db, "plans"), (snap) => {
+    state.plans = snap.docs.map((d) => ({ id: d.id, ...d.data() }));
+    render();
+    ensureNavs();
+  });
   fs.onSnapshot(fs.collection(db, "divOverrides"), (snap) => {
     state.overrides = Object.fromEntries(snap.docs.map((d) => [d.id, d.data()]));
     render();
@@ -484,9 +668,11 @@ async function initFirebase() {
 
 // ---------- boot ----------
 async function boot() {
-  const [seed, market, dividends] = await Promise.all([
+  const [seed, market, dividends, holidays] = await Promise.all([
     getJSON("data/seed.json", { trades: [] }), getJSON("data/market.json", { prices: {} }), getJSON("data/dividends.json", {}),
+    getJSON("data/holidays_jp.json", []),
   ]);
+  state.holidaysJP = new Set(holidays);
   state.seed = seed.trades;
   state.baseYear = seed.baseYear ?? state.baseYear;
   state.market = market;
