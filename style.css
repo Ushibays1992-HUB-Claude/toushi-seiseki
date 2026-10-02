@@ -137,3 +137,35 @@ form.trade .actions { grid-column: 1 / -1; display: flex; gap: 8px; justify-cont
   section.card > h2 small { display: block; width: 100%; }
 }
 .tag.auto { background: color-mix(in srgb, var(--accent) 14%, transparent); color: var(--accent); }
+
+/* ---- compact layout ---- */
+main { padding-top: 12px; }
+section.card { padding: 12px 14px; margin-bottom: 12px; border-radius: 10px; }
+section.card > h2 { font-size: .95rem; margin-bottom: 8px; }
+.hero { grid-template-columns: minmax(240px, auto) 1fr; align-items: center; gap: 12px 24px; }
+.hero-value { font-size: clamp(1.7rem, 5vw, 2.3rem); }
+.hero-sub { font-size: .82rem; }
+.stats { grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); }
+.stat { padding: 6px 10px; }
+.stat .v { font-size: 1rem; }
+table { font-size: .84rem; line-height: 1.35; }
+th, td { padding: 5px 8px; }
+th { font-size: .74rem; background: var(--surface-2); }
+.name { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 300px; min-width: 0; }
+.name .code { color: var(--muted); margin-right: 6px; font-variant-numeric: tabular-nums; }
+.nowrap { white-space: nowrap; }
+tbody tr:hover td { background: var(--surface-2); }
+details.add { margin-bottom: 8px; }
+details.add > summary { cursor: pointer; color: var(--accent); font-size: .85rem; font-weight: 500; padding: 2px 0 6px; list-style: none; }
+details.add > summary::-webkit-details-marker { display: none; }
+details.add[open] > summary { color: var(--muted); }
+@media (max-width: 760px) {
+  .hero { grid-template-columns: 1fr; }
+}
+@media (max-width: 640px) {
+  .name { max-width: 150px; }
+  th, td { padding: 5px 4px; }
+}
+@media (max-width: 640px) {
+  .stats { grid-template-columns: repeat(2, 1fr); }
+}
