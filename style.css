@@ -170,3 +170,18 @@ details.add[open] > summary { color: var(--muted); }
   .stats { grid-template-columns: repeat(2, 1fr); }
 }
 section.card.note ul { margin: 0; padding-left: 1.2em; font-size: .82rem; color: var(--muted); }
+
+/* 銘柄別の表は列幅を固定し、株式・投資信託・売却済みの表で縦の位置をそろえる */
+table.holdings { table-layout: fixed; }
+table.holdings .name { max-width: none; }
+table.holdings .w-qty { width: 84px; }
+table.holdings .w-val { width: 110px; }
+table.holdings .w-trade { width: 172px; }
+table.holdings .w-div { width: 90px; }
+table.holdings .w-perf { width: 110px; }
+table.holdings td.n { overflow: hidden; text-overflow: ellipsis; }
+@media (max-width: 640px) {
+  table.holdings .w-val { width: 92px; }
+  table.holdings .w-div { width: 70px; }
+  table.holdings .w-perf { width: 88px; }
+}

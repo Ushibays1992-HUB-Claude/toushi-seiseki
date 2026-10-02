@@ -360,8 +360,8 @@ function holdingsTable(rows, opts) {
       <td class="n"><strong>${money(r.perf)}</strong></td>
     </tr>`).join("");
   const t = rows.reduce((a, r) => ({ start: a.start + r.start, end: a.end + r.end, div: a.div + r.div, perf: a.perf + r.perf }), { start: 0, end: 0, div: 0, perf: 0 });
-  return `<div class="table-wrap"><table>
-    <thead><tr><th>銘柄</th><th class="n opt">数量</th>${opts.values ? `<th class="n opt">年初評価額</th><th class="n">${opts.endLabel}</th>` : ""}<th class="n opt">買付・売却</th><th class="n">配当金</th><th class="n">成績</th></tr></thead>
+  return `<div class="table-wrap"><table class="holdings">
+    <thead><tr><th>銘柄</th><th class="n opt w-qty">数量</th>${opts.values ? `<th class="n opt w-val">年初評価額</th><th class="n w-val">${opts.endLabel}</th>` : ""}<th class="n opt w-trade">買付・売却</th><th class="n w-div">配当金</th><th class="n w-perf">成績</th></tr></thead>
     <tbody>${tr}</tbody>
     <tfoot><tr><td>合計（${rows.length}銘柄）</td><td class="opt"></td>${opts.values ? `<td class="n opt">${num(t.start)}</td><td class="n">${num(t.end)}</td>` : ""}<td class="opt"></td><td class="n">${num(t.div)}</td><td class="n">${money(t.perf)}</td></tr></tfoot>
   </table></div>`;
