@@ -22,6 +22,7 @@ const state = {
   holidaysJP: new Set(),
   overrides: {},
   openPanels: new Set(),
+  history: {},
   user: null,
   view: "total",
   fb: null,
@@ -224,6 +225,7 @@ function dividendEvents(year, endCut) {
 }
 
 function yearReport(year) {
+  if (state.history[year]) return historyReport(year);
   const today = todayJST();
   const isCurrent = year === curYear();
   const endCut = isCurrent ? today : `${year}-12-31`;
@@ -275,19 +277,34 @@ function yearReport(year) {
     .filter((r) => r.start || r.end || r.buy || r.sell || r.div)
     .sort((a, b) => b.perf - a.perf);
 
+  return { year, isCurrent, endCut, rows: list, divs, trades, total: totalsOf(list) };
+}
+
+function totalsOf(list) {
   const total = list.reduce((t, r) => {
-    for (const k of ["start", "end", "buy", "sell", "div", "perf", "dayChange"]) t[k] += r[k];
+    for (const k of ["start", "end", "buy", "sell", "div", "perf", "dayChange"]) t[k] += r[k] ?? 0;
     return t;
   }, { start: 0, end: 0, buy: 0, sell: 0, div: 0, perf: 0, dayChange: 0 });
   total.price = total.perf - total.div;
   total.rate = total.perf / (total.start + total.buy);
+  return total;
+}
 
-  return { year, isCurrent, endCut, rows: list, divs, trades, total };
+/** 確定済みの過去の年（data/history/YYYY.json。SBIの明細とExcelの記録から作成した集計） */
+function historyReport(year) {
+  const h = state.history[year];
+  const rows = h.rows.map((r) => ({ ...r, flags: [], dayChange: 0 })).sort((a, b) => b.perf - a.perf);
+  return {
+    year, isCurrent: false, endCut: `${year}-12-31`, rows, history: true, notes: h.notes,
+    divs: h.dividends.map((d) => ({ ...d, auto: d.amount, overridden: false })),
+    trades: h.trades, total: totalsOf(rows),
+  };
 }
 
 function years() {
   const ys = [];
-  for (let y = state.baseYear; y <= curYear(); y++) ys.push(y);
+  const first = Math.min(state.baseYear, ...Object.keys(state.history).map(Number));
+  for (let y = first; y <= curYear(); y++) ys.push(y);
   return ys;
 }
 
@@ -360,16 +377,16 @@ function holdingsSections(rows, title, opts) {
     `<section class="card"><h2>${title}（${label}）${note ? ` <small>${note}</small>` : ""}</h2>${holdingsTable(g, { ...opts, sold: label === "売却済み" })}</section>`).join("");
 }
 
-function dividendTable(divs) {
+function dividendTable(divs, readonly = false) {
   if (!divs.length) return `<p class="empty">この年の配当金はまだありません</p>`;
-  const admin = !!state.user;
+  const admin = !!state.user && !readonly;
   return `<div class="table-wrap"><table>
     <thead><tr><th>基準日</th><th>銘柄</th><th class="n opt">1株配当</th><th class="n opt">株数</th><th class="n">金額</th>${admin ? "<th></th>" : ""}</tr></thead>
     <tbody>${divs.slice().reverse().map((d) => `<tr>
-      <td class="num" style="text-align:left">${fmtDate(d.date)}</td>
-      ${nameCell(d.code, d.name, d.overridden ? `<span class="tag" title="自動計算 ${num(d.auto)}円">修正済み</span>` : "")}
-      <td class="n opt">${d.perShare.toLocaleString("ja-JP")}</td>
-      <td class="n opt">${num(d.qty)}</td>
+      <td class="num" style="text-align:left">${d.date ? fmtDate(d.date) : "—"}</td>
+      ${nameCell(d.code, d.name, `${d.overridden ? `<span class="tag" title="自動計算 ${num(d.auto)}円">修正済み</span>` : ""}${d.note ? `<span class="tag">${esc(d.note)}</span>` : ""}`)}
+      <td class="n opt">${d.perShare != null ? d.perShare.toLocaleString("ja-JP") : "—"}</td>
+      <td class="n opt">${d.qty != null ? num(d.qty) : "—"}</td>
       <td class="n">${num(d.amount)}</td>
       ${admin ? `<td class="n"><button class="btn link small" data-act="div-edit" data-key="${d.key}" data-amount="${d.amount}">修正</button>${d.overridden ? `<button class="btn link small" data-act="div-reset" data-key="${d.key}">戻す</button>` : ""}</td>` : ""}
     </tr>`).join("")}</tbody>
@@ -377,8 +394,8 @@ function dividendTable(divs) {
   </table></div>`;
 }
 
-function tradeTable(trades) {
-  const admin = !!state.user;
+function tradeTable(trades, readonly = false) {
+  const admin = !!state.user && !readonly;
   const form = admin ? addPanel("trade", "＋ 売買を登録", tradeForm()) : "";
   if (!trades.length) return `${form}<p class="empty">この年の売買はありません</p>`;
   return `${form}<div class="table-wrap"><table>
@@ -386,7 +403,7 @@ function tradeTable(trades) {
     <tbody>${trades.slice().reverse().map((t) => `<tr>
       <td class="num" style="text-align:left">${fmtDate(t.date)}</td>
       <td class="nowrap">${TYPE_LABEL[t.type]}<span class="tag opt">${esc(t.account)}</span>${t.auto ? '<span class="tag auto">自動</span>' : ""}</td>
-      ${nameCell(t.code, t.name)}
+      ${nameCell(t.code, t.name, t.note ? `<span class="tag" title="${esc(t.note)}">${t.note.includes("推定") || t.note.includes("逆算") ? "推定" : "注記"}</span>` : "")}
       <td class="n">${t.type === "split" ? `1→${esc(t.ratio)}` : num(t.qty)}</td>
       <td class="n opt">${t.price ? Number(t.price).toLocaleString("ja-JP") : "—"}</td>
       <td class="n">${t.amount ? num(t.amount) : "—"}</td>
@@ -422,10 +439,11 @@ function renderYear(year) {
     : statTile("年末評価額", yen(t.end), `年初 ${yen(t.start)}`);
   return `
     ${heroCard(`${year}年の成績${r.isCurrent ? `（${fmtDate(r.endCut)} 時点）` : ""}`, t,
-      `${extra}${statTile("今年の買付・売却", `買 ${yen(t.buy)}`, `売 ${yen(t.sell)}`)}`)}
+      `${extra}${statTile(r.isCurrent ? "今年の買付・売却" : "この年の買付・売却", `買 ${yen(t.buy)}`, `売 ${yen(t.sell)}`)}`)}
+    ${r.notes?.length ? `<section class="card note"><h2>この年のデータについて</h2><ul>${r.notes.map((n) => `<li>${esc(n)}</li>`).join("")}</ul></section>` : ""}
     ${holdingsSections(r.rows, "銘柄別の成績", { values: true, endLabel: r.isCurrent ? "現在評価額" : "年末評価額", soldNote: r.isCurrent ? "現在は保有していない銘柄" : "年末時点で保有していない銘柄" })}
-    <section class="card"><h2>売買履歴</h2>${tradeTable(r.trades)}</section>
-    <section class="card"><h2>配当金 <small>NISA口座は非課税、特定・一般口座は税引後</small></h2>${dividendTable(r.divs)}</section>
+    <section class="card"><h2>売買履歴</h2>${tradeTable(r.trades, r.history)}</section>
+    <section class="card"><h2>配当金 <small>NISA口座は非課税、特定・一般口座は税引後</small></h2>${dividendTable(r.divs, r.history)}</section>
     ${r.isCurrent && (state.plans.length || state.user) ? `<section class="card"><h2>積立設定 <small>毎月の買付を自動で売買履歴に計上します</small></h2>${planCard()}</section>` : ""}`;
 }
 
@@ -488,7 +506,7 @@ function renderTotal() {
       <td class="n opt">${num(r.total.div)}</td><td class="n">${pct(r.total.rate)}</td>
       <td class="n"><strong>${money(r.total.perf)}</strong></td></tr>`).join("");
   return `
-    ${heroCard(`通算の成績（${state.baseYear}年〜）`, total,
+    ${heroCard(`通算の成績（${years()[0]}年〜）`, total,
       `${statTile("現在の評価額", yen(latest?.end ?? 0), `前日比 ${signed(latest?.dayChange ?? 0)}円`)}`)}
     <section class="card"><h2>年ごとの成績</h2><div class="table-wrap"><table>
       <thead><tr><th>年</th><th class="n opt">年初評価額</th><th class="n">年末(現在)評価額</th><th class="n opt">配当金</th><th class="n">利回り</th><th class="n">成績</th></tr></thead>
@@ -709,6 +727,9 @@ async function boot() {
     getJSON("data/holidays_jp.json", []),
   ]);
   state.holidaysJP = new Set(holidays);
+  const histYears = await getJSON("data/history/index.json", []);
+  const hist = await Promise.all(histYears.map((y) => getJSON(`data/history/${y}.json`, null)));
+  histYears.forEach((y, i) => { if (hist[i]) state.history[y] = hist[i]; });
   state.seed = seed.trades;
   state.baseYear = seed.baseYear ?? state.baseYear;
   state.market = market;
