@@ -443,7 +443,7 @@ function renderYear(year) {
     : statTile("年末評価額", yen(t.end), `年初 ${yen(t.start)}`);
   return `
     ${heroCard(`${year}年の成績${r.isCurrent ? `（${fmtDate(r.endCut)} 時点）` : ""}`, t,
-      `${extra}${statTile(r.isCurrent ? "今年の買付・売却" : "この年の買付・売却", `買 ${yen(t.buy)}`, `売 ${yen(t.sell)}`)}`)}
+      `${extra}${statTile(r.isCurrent ? "今年の買付・売却" : "この年の買付・売却", `<span class="two-line">買 ${yen(t.buy)}<br>売 ${yen(t.sell)}</span>`)}`)}
     ${r.notes?.length ? `<section class="card note"><h2>この年のデータについて</h2><ul>${r.notes.map((n) => `<li>${esc(n)}</li>`).join("")}</ul></section>` : ""}
     ${holdingsSections(r.rows, "銘柄別の成績", { values: true, endLabel: r.isCurrent ? "現在評価額" : "年末評価額", soldNote: r.isCurrent ? "現在は保有していない銘柄" : "年末時点で保有していない銘柄" })}
     <section class="card"><h2>売買履歴</h2>${tradeTable(r.trades, r.history)}</section>
