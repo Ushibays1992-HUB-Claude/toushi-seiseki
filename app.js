@@ -278,7 +278,8 @@ function yearReport(year) {
   const list = Object.values(rows)
     .map((r) => ({ ...r, perf: r.end - r.start - r.buy + r.sell + r.div }))
     .filter((r) => r.start || r.end || r.buy || r.sell || r.div)
-    .sort((a, b) => b.perf - a.perf);
+    .sort((a, b) => b.perf - a.perf)
+    .map((r) => withCostBasis(r, trades));
 
   return { year, isCurrent, endCut, rows: list, divs, trades, total: totalsOf(list) };
 }
@@ -293,10 +294,46 @@ function totalsOf(list) {
   return total;
 }
 
+/**
+ * 参考単価（年初の評価額とその年の買付を平均した単価）と、含み損益・売却損益を計算する。
+ * 売却は参考単価で取得したものとして損益を出す（移動平均法）。含み損益＋売却損益＋配当＝成績になる。
+ */
+function withCostBasis(row, trades) {
+  if (row.startQty == null) return row; // 2021〜2023年（株数なし。含み損益・売却損益はデータに入っている）
+  const u = unitOf(row.kind);
+  let qty = row.startQty || 0;
+  let cost = row.start - (row.boundaryLot ?? 0);
+  let realized = 0;
+  let avg = qty > 0 ? cost / qty : null;
+  for (const t of trades) {
+    if (t.code !== row.code || t.boundary) continue;
+    if (t.type === "buy") {
+      qty += Number(t.qty);
+      cost += Number(t.amount);
+    } else if (t.type === "sell") {
+      const q = Number(t.qty);
+      const unitCost = qty > 0 ? cost / qty : 0;
+      realized += Number(t.amount) - unitCost * q;
+      cost -= unitCost * q;
+      qty -= q;
+    } else if (t.type === "split") {
+      qty *= Number(t.ratio) || 1;
+    }
+    if (qty > 0) avg = cost / qty;
+  }
+  const unreal = row.endQty > 0 ? row.end - cost : 0;
+  if (Math.abs(unreal + realized + row.div - row.perf) > 1) console.warn("成績の内訳が合わない", row.code, { unreal, realized, perf: row.perf });
+  return {
+    ...row, unreal, realized,
+    avgCost: avg != null ? avg * u : null,
+    lastPrice: row.endQty > 0 ? (row.end / row.endQty) * u : null,
+  };
+}
+
 /** 確定済みの過去の年（data/history/YYYY.json。SBIの明細とExcelの記録から作成した集計） */
 function historyReport(year) {
   const h = state.history[year];
-  const rows = h.rows.map((r) => ({ ...r, flags: [], dayChange: 0 })).sort((a, b) => b.perf - a.perf);
+  const rows = h.rows.map((r) => withCostBasis({ ...r, flags: [], dayChange: 0 }, h.trades)).sort((a, b) => b.perf - a.perf);
   return {
     year, isCurrent: false, endCut: `${year}-12-31`, rows, history: true, notes: h.notes,
     divs: h.dividends.map((d) => ({ ...d, auto: d.amount, overridden: false })),
@@ -349,21 +386,54 @@ function addPanel(id, label, form) {
 
 function holdingsTable(rows, opts) {
   if (!rows.length) return `<p class="empty">データがありません</p>`;
+  return opts.values ? yearHoldingsTable(rows, opts) : totalHoldingsTable(rows);
+}
+
+/** 各年の銘柄別の表：数量｜参考単価｜現在値｜現在評価額｜含み損益｜売却損益｜配当金｜成績 */
+function yearHoldingsTable(rows, opts) {
+  const unit = (r) => (r.kind === "fund" ? "口" : "株");
+  const price = (v) => (v != null ? Number(v.toFixed(v < 1000 ? 2 : 0)).toLocaleString("ja-JP") : "—");
+  const signedCell = (v) => (v ? money(v) : "—");
+  const tr = rows.map((r) => `<tr>
+      ${nameCell(r.code, r.name, `${r.tag ? `<span class="tag">${r.tag}</span>` : ""}${r.flags.map((f) => `<span class="warn-mark">${esc(f)}</span>`).join("")}`)}
+      <td class="n opt">${r.endQty ? `${num(r.endQty)}${unit(r)}` : "—"}</td>
+      <td class="n opt">${price(r.avgCost)}</td>
+      <td class="n opt">${price(r.lastPrice)}</td>
+      <td class="n opt">${r.end ? num(r.end) : "—"}</td>
+      <td class="n">${signedCell(r.unreal)}</td>
+      <td class="n opt">${signedCell(r.realized)}</td>
+      <td class="n">${r.div ? num(r.div) : "—"}</td>
+      <td class="n"><strong>${money(r.perf)}</strong></td>
+    </tr>`).join("");
+  const t = rows.reduce((a, r) => {
+    for (const k of ["end", "unreal", "realized", "div", "perf"]) a[k] += r[k] ?? 0;
+    return a;
+  }, { end: 0, unreal: 0, realized: 0, div: 0, perf: 0 });
+  return `<div class="table-wrap"><table class="holdings">
+    <thead><tr><th>銘柄</th><th class="n opt w-qty">数量</th><th class="n opt w-price">参考単価</th><th class="n opt w-price">${opts.priceLabel}</th>
+      <th class="n opt w-val">${opts.endLabel}</th><th class="n w-pl">含み損益</th><th class="n opt w-pl">売却損益</th><th class="n w-div">配当金</th><th class="n w-perf">成績</th></tr></thead>
+    <tbody>${tr}</tbody>
+    <tfoot><tr><td>合計（${rows.length}銘柄）</td><td class="opt"></td><td class="opt"></td><td class="opt"></td>
+      <td class="n opt">${num(t.end)}</td><td class="n">${money(t.unreal)}</td><td class="n opt">${money(t.realized)}</td><td class="n">${num(t.div)}</td><td class="n">${money(t.perf)}</td></tr></tfoot>
+  </table></div>`;
+}
+
+/** 通算タブの銘柄別の表 */
+function totalHoldingsTable(rows) {
   const unit = (r) => (r.kind === "fund" ? "口" : "株");
   const tradeCell = (r) => [r.buy ? `買 ${num(r.buy)}` : "", r.sell ? `売 ${num(r.sell)}` : ""].filter(Boolean).join(" / ") || "—";
   const tr = rows.map((r) => `<tr>
       ${nameCell(r.code, r.name, `${r.tag ? `<span class="tag">${r.tag}</span>` : ""}${r.flags.map((f) => `<span class="warn-mark">${esc(f)}</span>`).join("")}`)}
       <td class="n opt">${r.endQty ? `${num(r.endQty)}${unit(r)}` : "—"}</td>
-      ${opts.values ? `<td class="n opt">${r.start ? num(r.start) : "—"}</td><td class="n">${r.end ? num(r.end) : "—"}</td>` : ""}
       <td class="n opt">${tradeCell(r)}</td>
       <td class="n">${r.div ? num(r.div) : "—"}</td>
       <td class="n"><strong>${money(r.perf)}</strong></td>
     </tr>`).join("");
-  const t = rows.reduce((a, r) => ({ start: a.start + r.start, end: a.end + r.end, div: a.div + r.div, perf: a.perf + r.perf }), { start: 0, end: 0, div: 0, perf: 0 });
+  const t = rows.reduce((a, r) => ({ div: a.div + r.div, perf: a.perf + r.perf }), { div: 0, perf: 0 });
   return `<div class="table-wrap"><table class="holdings">
-    <thead><tr><th>銘柄</th><th class="n opt w-qty">数量</th>${opts.values ? `<th class="n opt w-val">年初評価額</th><th class="n w-val">${opts.endLabel}</th>` : ""}<th class="n opt w-trade">買付・売却</th><th class="n w-div">配当金</th><th class="n w-perf">成績</th></tr></thead>
+    <thead><tr><th>銘柄</th><th class="n opt w-qty">数量</th><th class="n opt w-trade">買付・売却</th><th class="n w-div">配当金</th><th class="n w-perf">成績</th></tr></thead>
     <tbody>${tr}</tbody>
-    <tfoot><tr><td>合計（${rows.length}銘柄）</td><td class="opt"></td>${opts.values ? `<td class="n opt">${num(t.start)}</td><td class="n">${num(t.end)}</td>` : ""}<td class="opt"></td><td class="n">${num(t.div)}</td><td class="n">${money(t.perf)}</td></tr></tfoot>
+    <tfoot><tr><td>合計（${rows.length}銘柄）</td><td class="opt"></td><td class="opt"></td><td class="n">${num(t.div)}</td><td class="n">${money(t.perf)}</td></tr></tfoot>
   </table></div>`;
 }
 
@@ -445,7 +515,7 @@ function renderYear(year) {
     ${heroCard(`${year}年の成績${r.isCurrent ? `（${fmtDate(r.endCut)} 時点）` : ""}`, t,
       `${extra}${statTile(r.isCurrent ? "今年の買付・売却" : "この年の買付・売却", `<span class="two-line">買 ${yen(t.buy)}<br>売 ${yen(t.sell)}</span>`)}`)}
     ${r.notes?.length ? `<section class="card note"><h2>この年のデータについて</h2><ul>${r.notes.map((n) => `<li>${esc(n)}</li>`).join("")}</ul></section>` : ""}
-    ${holdingsSections(r.rows, "銘柄別の成績", { values: true, endLabel: r.isCurrent ? "現在評価額" : "年末評価額", soldNote: r.isCurrent ? "現在は保有していない銘柄" : "年末時点で保有していない銘柄" })}
+    ${holdingsSections(r.rows, "銘柄別の成績", { values: true, endLabel: r.isCurrent ? "現在評価額" : "年末評価額", priceLabel: r.isCurrent ? "現在値" : "年末値", soldNote: r.isCurrent ? "現在は保有していない銘柄" : "年末時点で保有していない銘柄" })}
     <section class="card"><h2>売買履歴</h2>${tradeTable(r.trades, r.history)}</section>
     <section class="card"><h2>配当金 <small>NISA口座は非課税、特定・一般口座は税引後</small></h2>${dividendTable(r.divs, r.history)}</section>
     ${r.isCurrent && (state.plans.length || state.user) ? `<section class="card"><h2>積立設定 <small>毎月の買付を自動で売買履歴に計上します</small></h2>${planCard()}</section>` : ""}`;

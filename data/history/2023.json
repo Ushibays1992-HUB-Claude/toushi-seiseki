@@ -18,7 +18,9 @@
    "sell": 0,
    "end": 138300,
    "div": 1594,
-   "perf": -37106
+   "perf": -37106,
+   "unreal": -38700,
+   "realized": 0
   },
   {
    "code": "8591",
@@ -33,7 +35,9 @@
    "sell": 0,
    "end": 265750,
    "div": 6822,
-   "perf": 60722
+   "perf": 60722,
+   "unreal": 53900,
+   "realized": 0
   },
   {
    "code": "9202",
@@ -48,7 +52,9 @@
    "sell": 0,
    "end": 307100,
    "div": 0,
-   "perf": 32850
+   "perf": 32850,
+   "unreal": 32850,
+   "realized": 0
   },
   {
    "code": "2914",
@@ -63,7 +69,9 @@
    "sell": 0,
    "end": 365900,
    "div": 20700,
-   "perf": 124850
+   "perf": 124850,
+   "unreal": 104150,
+   "realized": 0
   },
   {
    "code": "4765",
@@ -78,7 +86,9 @@
    "sell": 0,
    "end": 61100,
    "div": 2125,
-   "perf": 18525
+   "perf": 18525,
+   "unreal": 16400,
+   "realized": 0
   },
   {
    "code": "5253",
@@ -93,7 +103,9 @@
    "sell": 278600,
    "end": 0,
    "div": 0,
-   "perf": 203600
+   "perf": 203600,
+   "unreal": 0,
+   "realized": 203600
   },
   {
    "code": "7163",
@@ -108,7 +120,9 @@
    "sell": 409400,
    "end": 0,
    "div": 0,
-   "perf": 49400
+   "perf": 49400,
+   "unreal": 0,
+   "realized": 49400
   },
   {
    "code": "5838",
@@ -123,7 +137,9 @@
    "sell": 385600,
    "end": 0,
    "div": 0,
-   "perf": 105600
+   "perf": 105600,
+   "unreal": 0,
+   "realized": 105600
   },
   {
    "code": "5842",
@@ -138,7 +154,9 @@
    "sell": 231300,
    "end": 0,
    "div": 0,
-   "perf": -8700
+   "perf": -8700,
+   "unreal": 0,
+   "realized": -8700
   },
   {
    "code": "5589",
@@ -153,7 +171,9 @@
    "sell": 200000,
    "end": 0,
    "div": 0,
-   "perf": -67000
+   "perf": -67000,
+   "unreal": 0,
+   "realized": -67000
   },
   {
    "code": "5590",
@@ -168,7 +188,9 @@
    "sell": 115000,
    "end": 0,
    "div": 0,
-   "perf": -30000
+   "perf": -30000,
+   "unreal": 0,
+   "realized": -30000
   },
   {
    "code": "5596",
@@ -183,7 +205,9 @@
    "sell": 141400,
    "end": 0,
    "div": 0,
-   "perf": -38600
+   "perf": -38600,
+   "unreal": 0,
+   "realized": -38600
   },
   {
    "code": "5891",
@@ -198,7 +222,9 @@
    "sell": 175300,
    "end": 0,
    "div": 0,
-   "perf": 35300
+   "perf": 35300,
+   "unreal": 0,
+   "realized": 35300
   },
   {
    "code": "5869",
@@ -213,7 +239,9 @@
    "sell": 223600,
    "end": 0,
    "div": 0,
-   "perf": 29600
+   "perf": 29600,
+   "unreal": 0,
+   "realized": 29600
   },
   {
    "code": "1326",
@@ -228,7 +256,9 @@
    "sell": 0,
    "end": 271550,
    "div": 0,
-   "perf": 65425
+   "perf": 65425,
+   "unreal": 65425,
+   "realized": 0
   },
   {
    "code": "1545",
@@ -243,7 +273,9 @@
    "sell": 0,
    "end": 290820,
    "div": 1560,
-   "perf": 112662
+   "perf": 112662,
+   "unreal": 111102,
+   "realized": 0
   },
   {
    "code": "1681",
@@ -258,7 +290,9 @@
    "sell": 0,
    "end": 257600,
    "div": 3998,
-   "perf": 28628
+   "perf": 28628,
+   "unreal": 24630,
+   "realized": 0
   },
   {
    "code": "1306",
@@ -273,7 +307,9 @@
    "sell": 0,
    "end": 173285,
    "div": 3436,
-   "perf": 40116
+   "perf": 40116,
+   "unreal": 36680,
+   "realized": 0
   },
   {
    "code": "1489",
@@ -288,7 +324,9 @@
    "sell": 0,
    "end": 405300,
    "div": 12366,
-   "perf": 105096
+   "perf": 105096,
+   "unreal": 92730,
+   "realized": 0
   },
   {
    "code": "2515",
@@ -303,7 +341,9 @@
    "sell": 0,
    "end": 234630,
    "div": 5239,
-   "perf": 33349
+   "perf": 33349,
+   "unreal": 28110,
+   "realized": 0
   },
   {
    "code": "2563",
@@ -318,7 +358,9 @@
    "sell": 0,
    "end": 119658,
    "div": 2168,
-   "perf": 18614
+   "perf": 18614,
+   "unreal": 16446,
+   "realized": 0
   },
   {
    "code": "1658",
@@ -333,7 +375,9 @@
    "sell": 0,
    "end": 195200,
    "div": 2839,
-   "perf": 38607
+   "perf": 38607,
+   "unreal": 35768,
+   "realized": 0
   },
   {
    "code": "2562",
@@ -348,7 +392,9 @@
    "sell": 0,
    "end": 149275,
    "div": 1563,
-   "perf": 39438
+   "perf": 39438,
+   "unreal": 37875,
+   "realized": 0
   },
   {
    "code": "1343",
@@ -363,7 +409,9 @@
    "sell": 0,
    "end": 58350,
    "div": 1287,
-   "perf": -537
+   "perf": -537,
+   "unreal": -1824,
+   "realized": 0
   },
   {
    "code": "2633",
@@ -378,7 +426,9 @@
    "sell": 0,
    "end": 125160,
    "div": 325,
-   "perf": 53130
+   "perf": 53130,
+   "unreal": 52805,
+   "realized": 0
   },
   {
    "code": "1497",
@@ -393,7 +443,9 @@
    "sell": 0,
    "end": 77400,
    "div": 2966,
-   "perf": 2406
+   "perf": 2406,
+   "unreal": -560,
+   "realized": 0
   },
   {
    "code": "1560",
@@ -408,7 +460,9 @@
    "sell": 0,
    "end": 44100,
    "div": 1252,
-   "perf": 1502
+   "perf": 1502,
+   "unreal": 250,
+   "realized": 0
   },
   {
    "code": "1566",
@@ -423,7 +477,9 @@
    "sell": 0,
    "end": 48180,
    "div": 1752,
-   "perf": 7242
+   "perf": 7242,
+   "unreal": 5490,
+   "realized": 0
   },
   {
    "code": "2529",
@@ -438,7 +494,9 @@
    "sell": 0,
    "end": 67500,
    "div": 1800,
-   "perf": 13575
+   "perf": 13575,
+   "unreal": 11775,
+   "realized": 0
   },
   {
    "code": "2559",
@@ -453,7 +511,9 @@
    "sell": 0,
    "end": 579870,
    "div": 0,
-   "perf": 24815
+   "perf": 24815,
+   "unreal": 24815,
+   "realized": 0
   },
   {
    "code": "03311187",
@@ -468,7 +528,9 @@
    "sell": 0,
    "end": 391121,
    "div": 0,
-   "perf": 106063
+   "perf": 106063,
+   "unreal": 106063,
+   "realized": 0
   },
   {
    "code": "03311968",
@@ -483,7 +545,9 @@
    "sell": 0,
    "end": 32526,
    "div": 0,
-   "perf": 10190
+   "perf": 10190,
+   "unreal": 10190,
+   "realized": 0
   },
   {
    "code": "0331213N",
@@ -498,7 +562,9 @@
    "sell": 0,
    "end": 17185,
    "div": 0,
-   "perf": 791
+   "perf": 791,
+   "unreal": 791,
+   "realized": 0
   },
   {
    "code": "03312181",
@@ -513,7 +579,9 @@
    "sell": 0,
    "end": 53662,
    "div": 0,
-   "perf": 6110
+   "perf": 6110,
+   "unreal": 6110,
+   "realized": 0
   },
   {
    "code": "03316163",
@@ -528,7 +596,9 @@
    "sell": 82168,
    "end": 0,
    "div": 0,
-   "perf": 13862
+   "perf": 13862,
+   "unreal": 0,
+   "realized": 13862
   },
   {
    "code": "04314056",
@@ -543,7 +613,9 @@
    "sell": 67532,
    "end": 0,
    "div": 0,
-   "perf": 7881
+   "perf": 7881,
+   "unreal": 0,
+   "realized": 7881
   },
   {
    "code": "0431W169",
@@ -558,7 +630,9 @@
    "sell": 0,
    "end": 55512,
    "div": 0,
-   "perf": 10144
+   "perf": 10144,
+   "unreal": 10144,
+   "realized": 0
   },
   {
    "code": "12312001",
@@ -573,7 +647,9 @@
    "sell": 0,
    "end": 18547,
    "div": 0,
-   "perf": 103
+   "perf": 103,
+   "unreal": 103,
+   "realized": 0
   },
   {
    "code": "1231616C",
@@ -588,7 +664,9 @@
    "sell": 0,
    "end": 47606,
    "div": 0,
-   "perf": 519
+   "perf": 519,
+   "unreal": 519,
+   "realized": 0
   },
   {
    "code": "47311163",
@@ -603,7 +681,9 @@
    "sell": 59565,
    "end": 0,
    "div": 0,
-   "perf": 6002
+   "perf": 6002,
+   "unreal": 0,
+   "realized": 6002
   },
   {
    "code": "4731A15C",
@@ -618,7 +698,9 @@
    "sell": 56415,
    "end": 0,
    "div": 0,
-   "perf": 286
+   "perf": 286,
+   "unreal": 0,
+   "realized": 286
   },
   {
    "code": "4731B15C",
@@ -633,7 +715,9 @@
    "sell": 99717,
    "end": 0,
    "div": 0,
-   "perf": 20429
+   "perf": 20429,
+   "unreal": 0,
+   "realized": 20429
   },
   {
    "code": "4731D15C",
@@ -648,7 +732,9 @@
    "sell": 63551,
    "end": 0,
    "div": 0,
-   "perf": 3908
+   "perf": 3908,
+   "unreal": 0,
+   "realized": 3908
   },
   {
    "code": "79312021",
@@ -663,7 +749,9 @@
    "sell": 46106,
    "end": 0,
    "div": 0,
-   "perf": -886
+   "perf": -886,
+   "unreal": 0,
+   "realized": -886
   },
   {
    "code": "79312107",
@@ -678,7 +766,9 @@
    "sell": 0,
    "end": 29421,
    "div": 0,
-   "perf": 3964
+   "perf": 3964,
+   "unreal": 3964,
+   "realized": 0
   },
   {
    "code": "79313138",
@@ -693,7 +783,9 @@
    "sell": 0,
    "end": 17926,
    "div": 0,
-   "perf": 781
+   "perf": 781,
+   "unreal": 781,
+   "realized": 0
   },
   {
    "code": "7931316B",
@@ -708,7 +800,9 @@
    "sell": 0,
    "end": 51263,
    "div": 0,
-   "perf": 5862
+   "perf": 5862,
+   "unreal": 5862,
+   "realized": 0
   },
   {
    "code": "29311041",
@@ -723,7 +817,9 @@
    "sell": 81016,
    "end": 0,
    "div": 0,
-   "perf": 16183
+   "perf": 16183,
+   "unreal": 0,
+   "realized": 16183
   },
   {
    "code": "2931213C",
@@ -738,7 +834,9 @@
    "sell": 59834,
    "end": 0,
    "div": 0,
-   "perf": 6795
+   "perf": 6795,
+   "unreal": 0,
+   "realized": 6795
   },
   {
    "code": "29312154",
@@ -753,7 +851,9 @@
    "sell": 79858,
    "end": 0,
    "div": 0,
-   "perf": 16691
+   "perf": 16691,
+   "unreal": 0,
+   "realized": 16691
   },
   {
    "code": "29314136",
@@ -768,7 +868,9 @@
    "sell": 55908,
    "end": 0,
    "div": 0,
-   "perf": 305
+   "perf": 305,
+   "unreal": 0,
+   "realized": 305
   },
   {
    "code": "01313139",
@@ -783,7 +885,9 @@
    "sell": 54011,
    "end": 0,
    "div": 0,
-   "perf": 647
+   "perf": 647,
+   "unreal": 0,
+   "realized": 647
   },
   {
    "code": "01314133",
@@ -798,7 +902,9 @@
    "sell": 0,
    "end": 28670,
    "div": 0,
-   "perf": 188
+   "perf": 188,
+   "unreal": 188,
+   "realized": 0
   },
   {
    "code": "0131610B",
@@ -813,7 +919,9 @@
    "sell": 78429,
    "end": 0,
    "div": 0,
-   "perf": 16274
+   "perf": 16274,
+   "unreal": 0,
+   "realized": 16274
   },
   {
    "code": "01316951",
@@ -828,7 +936,9 @@
    "sell": 0,
    "end": 42906,
    "div": 1112,
-   "perf": 6648
+   "perf": 6648,
+   "unreal": 5536,
+   "realized": 0
   },
   {
    "code": "0131A10B",
@@ -843,7 +953,9 @@
    "sell": 44998,
    "end": 0,
    "div": 0,
-   "perf": -976
+   "perf": -976,
+   "unreal": 0,
+   "realized": -976
   },
   {
    "code": "0131C10B",
@@ -858,7 +970,9 @@
    "sell": 0,
    "end": 27092,
    "div": 0,
-   "perf": -84
+   "perf": -84,
+   "unreal": -84,
+   "realized": 0
   },
   {
    "code": "89311199",
@@ -873,7 +987,9 @@
    "sell": 0,
    "end": 261771,
    "div": 0,
-   "perf": 70828
+   "perf": 70828,
+   "unreal": 70828,
+   "realized": 0
   },
   {
    "code": "89314135",
@@ -888,7 +1004,9 @@
    "sell": 58032,
    "end": 0,
    "div": 0,
-   "perf": 5571
+   "perf": 5571,
+   "unreal": 0,
+   "realized": 5571
   },
   {
    "code": "89315135",
@@ -903,7 +1021,9 @@
    "sell": 0,
    "end": 26262,
    "div": 0,
-   "perf": 3921
+   "perf": 3921,
+   "unreal": 3921,
+   "realized": 0
   },
   {
    "code": "64311104",
@@ -918,7 +1038,9 @@
    "sell": 82661,
    "end": 0,
    "div": 0,
-   "perf": 17160
+   "perf": 17160,
+   "unreal": 0,
+   "realized": 17160
   },
   {
    "code": "64313138",
@@ -933,7 +1055,9 @@
    "sell": 0,
    "end": 27520,
    "div": 0,
-   "perf": 2069
+   "perf": 2069,
+   "unreal": 2069,
+   "realized": 0
   },
   {
    "code": "6431513B",
@@ -948,7 +1072,9 @@
    "sell": 176796,
    "end": 0,
    "div": 0,
-   "perf": 24977
+   "perf": 24977,
+   "unreal": 0,
+   "realized": 24977
   },
   {
    "code": "4831C139",
@@ -963,7 +1089,9 @@
    "sell": 0,
    "end": 91960,
    "div": 0,
-   "perf": 24960
+   "perf": 24960,
+   "unreal": 24960,
+   "realized": 0
   },
   {
    "code": "4831F139",
@@ -978,7 +1106,9 @@
    "sell": 63882,
    "end": 0,
    "div": 0,
-   "perf": 7699
+   "perf": 7699,
+   "unreal": 0,
+   "realized": 7699
   },
   {
    "code": "4831K139",
@@ -993,7 +1123,9 @@
    "sell": 59441,
    "end": 0,
    "div": 0,
-   "perf": 3443
+   "perf": 3443,
+   "unreal": 0,
+   "realized": 3443
   },
   {
    "code": "4831M139",
@@ -1008,7 +1140,9 @@
    "sell": 100385,
    "end": 0,
    "div": 0,
-   "perf": 18637
+   "perf": 18637,
+   "unreal": 0,
+   "realized": 18637
   },
   {
    "code": "AJ316183",
@@ -1023,7 +1157,9 @@
    "sell": 0,
    "end": 58977,
    "div": 0,
-   "perf": 12165
+   "perf": 12165,
+   "unreal": 12165,
+   "realized": 0
   },
   {
    "code": "VOO",
@@ -1038,7 +1174,9 @@
    "sell": 0,
    "end": 61924,
    "div": 0,
-   "perf": 14882
+   "perf": 14882,
+   "unreal": 14882,
+   "realized": 0
   },
   {
    "code": "VTI",
@@ -1053,7 +1191,9 @@
    "sell": 0,
    "end": 33671,
    "div": 0,
-   "perf": 8052
+   "perf": 8052,
+   "unreal": 8052,
+   "realized": 0
   },
   {
    "code": "VYM",
@@ -1068,7 +1208,9 @@
    "sell": 0,
    "end": 31625,
    "div": 0,
-   "perf": 2377
+   "perf": 2377,
+   "unreal": 2377,
+   "realized": 0
   }
  ],
  "dividends": [

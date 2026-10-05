@@ -5,19 +5,6 @@
  ],
  "rows": [
   {
-   "code": "01316951",
-   "name": "野村ワールドスターオープン",
-   "kind": "fund",
-   "startQty": 30070.0,
-   "endQty": 0,
-   "buy": 0,
-   "sell": 53840,
-   "div": 1804,
-   "start": 47134,
-   "end": 0,
-   "perf": 8510
-  },
-  {
    "code": "1681",
    "name": "上場インデックス 海外新興国株式",
    "kind": "stock",
@@ -31,43 +18,30 @@
    "perf": 110064
   },
   {
-   "code": "0331418A",
-   "name": "eMAXIS Slim 全世界株式(オール・カントリー)",
-   "kind": "fund",
-   "startQty": 486280.0,
-   "endQty": 911924.0,
-   "buy": 1200000,
+   "code": "2515",
+   "name": "NF 外国REIT(ヘッジなし)",
+   "kind": "stock",
+   "startQty": 200.0,
+   "endQty": 470.0,
+   "buy": 396225,
    "sell": 0,
-   "div": 0,
-   "start": 1346315,
-   "end": 3042634,
-   "perf": 496319
+   "div": 12990,
+   "start": 290800,
+   "end": 695130,
+   "perf": 21095
   },
   {
-   "code": "446A",
-   "name": "ノースサンド",
+   "code": "2914",
+   "name": "日本たばこ産業",
    "kind": "stock",
-   "startQty": 0,
+   "startQty": 100.0,
    "endQty": 0,
-   "buy": 112000,
-   "sell": 120000,
-   "div": 0,
-   "start": 0,
-   "end": 0,
-   "perf": 8000
-  },
-  {
-   "code": "1545",
-   "name": "NF NASDAQ-100(ヘッジなし)",
-   "kind": "stock",
-   "startQty": 12.0,
-   "endQty": 12.0,
    "buy": 0,
-   "sell": 0,
-   "div": 1704,
-   "start": 411360,
-   "end": 481800,
-   "perf": 72144
+   "sell": 565130,
+   "div": 10400,
+   "start": 408000,
+   "end": 0,
+   "perf": 167530
   },
   {
    "code": "2559",
@@ -83,6 +57,58 @@
    "perf": 152966
   },
   {
+   "code": "2845",
+   "name": "NF NASDAQ-100(ヘッジあり)",
+   "kind": "stock",
+   "startQty": 0,
+   "endQty": 150.0,
+   "buy": 445800,
+   "sell": 0,
+   "div": 0,
+   "start": 0,
+   "end": 470250,
+   "perf": 24450
+  },
+  {
+   "code": "03311187",
+   "name": "eMAXIS Slim 米国株式(S&P500)",
+   "kind": "fund",
+   "startQty": 161141.0,
+   "endQty": 0,
+   "buy": 0,
+   "sell": 624873,
+   "div": 0,
+   "start": 550812,
+   "end": 0,
+   "perf": 74061
+  },
+  {
+   "code": "446A",
+   "name": "ノースサンド",
+   "kind": "stock",
+   "startQty": 0,
+   "endQty": 0,
+   "buy": 112000,
+   "sell": 120000,
+   "div": 0,
+   "start": 0,
+   "end": 0,
+   "perf": 8000
+  },
+  {
+   "code": "1306",
+   "name": "NF TOPIX",
+   "kind": "stock",
+   "startQty": 500.0,
+   "endQty": 500.0,
+   "buy": 0,
+   "sell": 0,
+   "div": 3475,
+   "start": 145950,
+   "end": 178950,
+   "perf": 36475
+  },
+  {
    "code": "9202",
    "name": "ANAホールディングス",
    "kind": "stock",
@@ -94,6 +120,19 @@
    "start": 286550,
    "end": 297900,
    "perf": 17350
+  },
+  {
+   "code": "1658",
+   "name": "iS コアMSCI新興国株",
+   "kind": "stock",
+   "startQty": 90.0,
+   "endQty": 90.0,
+   "buy": 0,
+   "sell": 0,
+   "div": 6660,
+   "start": 256050,
+   "end": 325350,
+   "perf": 75960
   },
   {
    "code": "7931316B",
@@ -109,17 +148,30 @@
    "perf": -730
   },
   {
-   "code": "2432",
-   "name": "ディー・エヌ・エー",
-   "kind": "stock",
-   "startQty": 100.0,
-   "endQty": 100.0,
-   "buy": 0,
+   "code": "0331418A",
+   "name": "eMAXIS Slim 全世界株式(オール・カントリー)",
+   "kind": "fund",
+   "startQty": 486280.0,
+   "endQty": 911924.0,
+   "buy": 1200000,
    "sell": 0,
-   "div": 6500,
-   "start": 313500,
-   "end": 253800,
-   "perf": -53200
+   "div": 0,
+   "start": 1346315,
+   "end": 3042634,
+   "perf": 496319
+  },
+  {
+   "code": "01316951",
+   "name": "野村ワールドスターオープン",
+   "kind": "fund",
+   "startQty": 30070.0,
+   "endQty": 0,
+   "buy": 0,
+   "sell": 53840,
+   "div": 1804,
+   "start": 47134,
+   "end": 0,
+   "perf": 8510
   },
   {
    "code": "2563",
@@ -135,17 +187,43 @@
    "perf": 48380
   },
   {
-   "code": "1306",
-   "name": "NF TOPIX",
+   "code": "8303",
+   "name": "SBI新生銀行",
    "kind": "stock",
-   "startQty": 500.0,
-   "endQty": 500.0,
+   "startQty": 0,
+   "endQty": 0,
+   "buy": 145000,
+   "sell": 158600,
+   "div": 0,
+   "start": 0,
+   "end": 0,
+   "perf": 13600
+  },
+  {
+   "code": "2432",
+   "name": "ディー・エヌ・エー",
+   "kind": "stock",
+   "startQty": 100.0,
+   "endQty": 100.0,
    "buy": 0,
    "sell": 0,
-   "div": 3475,
-   "start": 145950,
-   "end": 178950,
-   "perf": 36475
+   "div": 6500,
+   "start": 313500,
+   "end": 253800,
+   "perf": -53200
+  },
+  {
+   "code": "89311199",
+   "name": "SBI・V・S&P500インデックス・ファンド",
+   "kind": "fund",
+   "startQty": 117772.0,
+   "endQty": 0,
+   "buy": 0,
+   "sell": 417655,
+   "div": 0,
+   "start": 368355,
+   "end": 0,
+   "perf": 49300
   },
   {
    "code": "1497",
@@ -174,6 +252,19 @@
    "perf": 248310
   },
   {
+   "code": "03312181",
+   "name": "eMAXIS 日経アジア300インベスタブル",
+   "kind": "fund",
+   "startQty": 45492.0,
+   "endQty": 0,
+   "buy": 0,
+   "sell": 90097,
+   "div": 0,
+   "start": 68779,
+   "end": 0,
+   "perf": 21318
+  },
+  {
    "code": "471A",
    "name": "NSグループ",
    "kind": "stock",
@@ -187,30 +278,17 @@
    "perf": -20000
   },
   {
-   "code": "2845",
-   "name": "NF NASDAQ-100(ヘッジあり)",
+   "code": "1545",
+   "name": "NF NASDAQ-100(ヘッジなし)",
    "kind": "stock",
-   "startQty": 0,
-   "endQty": 150.0,
-   "buy": 445800,
+   "startQty": 12.0,
+   "endQty": 12.0,
+   "buy": 0,
    "sell": 0,
-   "div": 0,
-   "start": 0,
-   "end": 470250,
-   "perf": 24450
-  },
-  {
-   "code": "1489",
-   "name": "NF 日経高配当50",
-   "kind": "stock",
-   "startQty": 480.0,
-   "endQty": 770.0,
-   "buy": 784567,
-   "sell": 0,
-   "div": 42720,
-   "start": 1115040,
-   "end": 2201430,
-   "perf": 344543
+   "div": 1704,
+   "start": 411360,
+   "end": 481800,
+   "perf": 72144
   },
   {
    "code": "0431W169",
@@ -226,82 +304,17 @@
    "perf": 3067
   },
   {
-   "code": "1658",
-   "name": "iS コアMSCI新興国株",
+   "code": "2562",
+   "name": "上場インデックス 米国ダウ(ヘッジあり)",
    "kind": "stock",
-   "startQty": 90.0,
-   "endQty": 90.0,
+   "startQty": 30.0,
+   "endQty": 30.0,
    "buy": 0,
    "sell": 0,
-   "div": 6660,
-   "start": 256050,
-   "end": 325350,
-   "perf": 75960
-  },
-  {
-   "code": "2515",
-   "name": "NF 外国REIT(ヘッジなし)",
-   "kind": "stock",
-   "startQty": 200.0,
-   "endQty": 470.0,
-   "buy": 396225,
-   "sell": 0,
-   "div": 12990,
-   "start": 290800,
-   "end": 695130,
-   "perf": 21095
-  },
-  {
-   "code": "2633",
-   "name": "NF S&P500(ヘッジなし)",
-   "kind": "stock",
-   "startQty": 200.0,
-   "endQty": 200.0,
-   "buy": 0,
-   "sell": 0,
-   "div": 840,
-   "start": 87100,
-   "end": 99460,
-   "perf": 13200
-  },
-  {
-   "code": "8303",
-   "name": "SBI新生銀行",
-   "kind": "stock",
-   "startQty": 0,
-   "endQty": 0,
-   "buy": 145000,
-   "sell": 158600,
-   "div": 0,
-   "start": 0,
-   "end": 0,
-   "perf": 13600
-  },
-  {
-   "code": "89311199",
-   "name": "SBI・V・S&P500インデックス・ファンド",
-   "kind": "fund",
-   "startQty": 117772.0,
-   "endQty": 0,
-   "buy": 0,
-   "sell": 417655,
-   "div": 0,
-   "start": 368355,
-   "end": 0,
-   "perf": 49300
-  },
-  {
-   "code": "AJ316183",
-   "name": "Smart-i 8資産バランス 成長型",
-   "kind": "fund",
-   "startQty": 34502.0,
-   "endQty": 0,
-   "buy": 0,
-   "sell": 85216,
-   "div": 0,
-   "start": 73099,
-   "end": 0,
-   "perf": 12117
+   "div": 990,
+   "start": 95580,
+   "end": 104340,
+   "perf": 9750
   },
   {
    "code": "2529",
@@ -317,6 +330,32 @@
    "perf": 16560
   },
   {
+   "code": "2633",
+   "name": "NF S&P500(ヘッジなし)",
+   "kind": "stock",
+   "startQty": 200.0,
+   "endQty": 200.0,
+   "buy": 0,
+   "sell": 0,
+   "div": 840,
+   "start": 87100,
+   "end": 99460,
+   "perf": 13200
+  },
+  {
+   "code": "AJ316183",
+   "name": "Smart-i 8資産バランス 成長型",
+   "kind": "fund",
+   "startQty": 34502.0,
+   "endQty": 0,
+   "buy": 0,
+   "sell": 85216,
+   "div": 0,
+   "start": 73099,
+   "end": 0,
+   "perf": 12117
+  },
+  {
    "code": "4765",
    "name": "SBIグローバルアセットマネジメント",
    "kind": "stock",
@@ -330,67 +369,20 @@
    "perf": -5415
   },
   {
-   "code": "03311187",
-   "name": "eMAXIS Slim 米国株式(S&P500)",
-   "kind": "fund",
-   "startQty": 161141.0,
-   "endQty": 0,
-   "buy": 0,
-   "sell": 624873,
-   "div": 0,
-   "start": 550812,
-   "end": 0,
-   "perf": 74061
-  },
-  {
-   "code": "2562",
-   "name": "上場インデックス 米国ダウ(ヘッジあり)",
+   "code": "1489",
+   "name": "NF 日経高配当50",
    "kind": "stock",
-   "startQty": 30.0,
-   "endQty": 30.0,
-   "buy": 0,
+   "startQty": 480.0,
+   "endQty": 770.0,
+   "buy": 784567,
    "sell": 0,
-   "div": 990,
-   "start": 95580,
-   "end": 104340,
-   "perf": 9750
-  },
-  {
-   "code": "03312181",
-   "name": "eMAXIS 日経アジア300インベスタブル",
-   "kind": "fund",
-   "startQty": 45492.0,
-   "endQty": 0,
-   "buy": 0,
-   "sell": 90097,
-   "div": 0,
-   "start": 68779,
-   "end": 0,
-   "perf": 21318
-  },
-  {
-   "code": "2914",
-   "name": "日本たばこ産業",
-   "kind": "stock",
-   "startQty": 100.0,
-   "endQty": 0,
-   "buy": 0,
-   "sell": 565130,
-   "div": 10400,
-   "start": 408000,
-   "end": 0,
-   "perf": 167530
+   "div": 42720,
+   "start": 1115040,
+   "end": 2201430,
+   "perf": 344543
   }
  ],
  "dividends": [
-  {
-   "date": "2025-01-06",
-   "code": "1489",
-   "name": "NF 日経高配当50",
-   "perShare": 4.0,
-   "qty": 480.0,
-   "amount": 1920
-  },
   {
    "date": "2025-01-06",
    "code": "2529",
@@ -398,6 +390,14 @@
    "perShare": 4.0,
    "qty": 45.0,
    "amount": 180
+  },
+  {
+   "date": "2025-01-06",
+   "code": "1489",
+   "name": "NF 日経高配当50",
+   "perShare": 4.0,
+   "qty": 480.0,
+   "amount": 1920
   },
   {
    "date": "2025-01-08",
@@ -434,19 +434,19 @@
   },
   {
    "date": "2025-02-09",
-   "code": "2563",
-   "name": "iS S&P500(ヘッジあり)",
-   "perShare": 1.9,
-   "qty": 1180.0,
-   "amount": 2242
-  },
-  {
-   "date": "2025-02-09",
    "code": "1658",
    "name": "iS コアMSCI新興国株",
    "perShare": 47.0,
    "qty": 90.0,
    "amount": 4230
+  },
+  {
+   "date": "2025-02-09",
+   "code": "2563",
+   "name": "iS S&P500(ヘッジあり)",
+   "perShare": 1.9,
+   "qty": 1180.0,
+   "amount": 2242
   },
   {
    "date": "2025-03-07",
@@ -490,19 +490,19 @@
   },
   {
    "date": "2025-04-07",
-   "code": "1489",
-   "name": "NF 日経高配当50",
-   "perShare": 40.0,
-   "qty": 480.0,
-   "amount": 19200
-  },
-  {
-   "date": "2025-04-07",
    "code": "2529",
    "name": "NF 野村株主還元70",
    "perShare": 22.0,
    "qty": 45.0,
    "amount": 990
+  },
+  {
+   "date": "2025-04-07",
+   "code": "1489",
+   "name": "NF 日経高配当50",
+   "perShare": 40.0,
+   "qty": 480.0,
+   "amount": 19200
   },
   {
    "date": "2025-04-11",
@@ -538,19 +538,19 @@
   },
   {
    "date": "2025-07-07",
-   "code": "1489",
-   "name": "NF 日経高配当50",
-   "perShare": 6.0,
-   "qty": 480.0,
-   "amount": 2880
-  },
-  {
-   "date": "2025-07-07",
    "code": "2529",
    "name": "NF 野村株主還元70",
    "perShare": 5.0,
    "qty": 45.0,
    "amount": 225
+  },
+  {
+   "date": "2025-07-07",
+   "code": "1489",
+   "name": "NF 日経高配当50",
+   "perShare": 6.0,
+   "qty": 480.0,
+   "amount": 2880
   },
   {
    "date": "2025-07-08",
@@ -587,19 +587,19 @@
   },
   {
    "date": "2025-08-09",
-   "code": "2563",
-   "name": "iS S&P500(ヘッジあり)",
-   "perShare": 1.8,
-   "qty": 1180.0,
-   "amount": 2124
-  },
-  {
-   "date": "2025-08-09",
    "code": "1658",
    "name": "iS コアMSCI新興国株",
    "perShare": 27.0,
    "qty": 90.0,
    "amount": 2430
+  },
+  {
+   "date": "2025-08-09",
+   "code": "2563",
+   "name": "iS S&P500(ヘッジあり)",
+   "perShare": 1.8,
+   "qty": 1180.0,
+   "amount": 2124
   },
   {
    "date": "2025-08-10",
@@ -635,19 +635,19 @@
   },
   {
    "date": "2025-10-07",
-   "code": "1489",
-   "name": "NF 日経高配当50",
-   "perShare": 39.0,
-   "qty": 480.0,
-   "amount": 18720
-  },
-  {
-   "date": "2025-10-07",
    "code": "2529",
    "name": "NF 野村株主還元70",
    "perShare": 20.0,
    "qty": 45.0,
    "amount": 900
+  },
+  {
+   "date": "2025-10-07",
+   "code": "1489",
+   "name": "NF 日経高配当50",
+   "perShare": 39.0,
+   "qty": 480.0,
+   "amount": 18720
   },
   {
    "date": "2025-10-11",
