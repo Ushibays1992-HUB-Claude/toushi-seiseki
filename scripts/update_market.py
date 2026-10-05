@@ -2,7 +2,9 @@
 
 - data/market.json      : 最新の価格（異常値チェック付き）
 - data/navs/CODE.json   : 投資信託の基準価額の履歴（積立の自動計上で約定日の価格に使う）
-- data/holidays_jp.json : 日本の祝日・休日（積立の約定日の計算に使う）
+                          毎日は最新値を1件追記し、全件の取り直しは月1回（または取りこぼしがあったとき）だけ
+- data/holidays_jp.json : 日本の祝日・休日（積立の約定日の計算に使う）。月1回だけ取得
+- data/fetch_state.json : 上の2つを最後に全件取得した月
 - data/yearend/YYYY.json: その年の最新価格。年が変わると自動的に「年末値」として固定される
 - data/dividends.json   : 1株あたり配当の履歴（追記のみ。一度記録した値は上書きしない）
 """
@@ -23,6 +25,8 @@ MUFG_FUNDS = {"0331418A": "253425"}
 # 協会コード → ISINコード（基準価額の履歴を投資信託協会から取るのに使う）
 FUND_ISIN = {"0331418A": "JP90C000H1T1"}
 NAV_HISTORY_FROM = "2025-12-01"
+# 基準価額の履歴で、前回の日付からこの日数より空いていたら取りこぼしとみなして全件を取り直す
+NAV_GAP_DAYS = 5
 
 # 前回価格からこの比率を超えて動いたら異常値候補として保留する
 JUMP_LIMIT = 0.3
@@ -94,6 +98,24 @@ def fetch_nav_history(code, isin):
             if d >= NAV_HISTORY_FROM:
                 navs[d] = int(r[1])
     return navs
+
+
+def update_nav_history(code, isin, latest, state, this_month):
+    """基準価額の履歴に最新値を追記する。月が変わったときと取りこぼしがあったときだけ投資信託協会から全件を取り直す。"""
+    path = DATA / "navs" / f"{code}.json"
+    navs = load_json(path, {})
+    last = max(navs) if navs else None
+    gap = last is None or (dt.date.fromisoformat(latest["date"]) - dt.date.fromisoformat(last)).days > NAV_GAP_DAYS
+    key = f"navFull:{code}"
+    if isin and (gap or state.get(key) != this_month):
+        try:
+            navs = fetch_nav_history(code, isin)
+            state[key] = this_month
+            print(f"{code}: nav history refreshed ({len(navs)} days)")
+        except Exception as e:  # noqa: BLE001
+            print(f"{code}: nav history failed ({e})")
+    navs[latest["date"]] = latest["price"]
+    save_json(path, dict(sorted(navs.items())))
 
 
 def fetch_jp_holidays():
@@ -183,6 +205,8 @@ def main():
         sec["isin"] = sec["isin"] or t.get("isin") or FUND_ISIN.get(t["code"])
 
     old_market = load_json(DATA / "market.json", {})
+    state = load_json(DATA / "fetch_state.json", {})
+    this_month = dt.datetime.now(JST).strftime("%Y-%m")
     dividends = load_json(DATA / "dividends.json", {})
     prices, yearend_updates = {}, {}
 
@@ -204,16 +228,17 @@ def main():
             yearend_updates.setdefault(p["date"][:4], {})[code] = {"price": p["price"], "date": p["date"]}
         if divs:
             merge_dividends(dividends, code, divs)
-        if sec["kind"] == "fund" and sec.get("isin"):
-            try:
-                save_json(DATA / "navs" / f"{code}.json", fetch_nav_history(code, sec["isin"]))
-            except Exception as e:  # noqa: BLE001
-                print(f"{code}: nav history failed ({e})")
+        if sec["kind"] == "fund":
+            update_nav_history(code, sec.get("isin"), new, state, this_month)
 
-    try:
-        save_json(DATA / "holidays_jp.json", fetch_jp_holidays())
-    except Exception as e:  # noqa: BLE001
-        print("holidays failed:", e)
+    if state.get("holidays") != this_month:
+        try:
+            save_json(DATA / "holidays_jp.json", fetch_jp_holidays())
+            state["holidays"] = this_month
+            print("holidays refreshed")
+        except Exception as e:  # noqa: BLE001
+            print("holidays failed:", e)
+    save_json(DATA / "fetch_state.json", state)
 
     save_json(DATA / "market.json", {"updatedAt": dt.datetime.now(JST).isoformat(timespec="minutes"), "prices": prices})
     for year, entries in yearend_updates.items():
