@@ -350,7 +350,9 @@ function years() {
 
 // ---------- rendering ----------
 function renderTabs() {
-  const tabs = [["total", "通算"], ...years().reverse().map((y) => [String(y), `${y}年`])];
+  // 今年 → 通算 → 前年以前（新しい順）
+  const [latest, ...older] = years().reverse().map((y) => [String(y), `${y}年`]);
+  const tabs = [latest, ["total", "通算"], ...older];
   $("#tabs").innerHTML = tabs
     .map(([k, label]) => `<button role="tab" data-view="${k}" aria-selected="${state.view === k}">${label}</button>`)
     .join("");
@@ -821,7 +823,8 @@ async function boot() {
   ys.forEach((y, i) => { if (files[i]) state.yearend[y] = files[i]; });
 
   const hash = location.hash.slice(1);
-  if (hash === "total" || years().includes(Number(hash))) state.view = hash;
+  // URLで指定がなければ今年の成績を表示する
+  state.view = hash === "total" || years().includes(Number(hash)) ? hash : String(curYear());
 
   if (CONFIGURED) {
     render();
