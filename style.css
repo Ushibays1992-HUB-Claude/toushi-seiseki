@@ -189,3 +189,16 @@ table.holdings td.n { overflow: hidden; text-overflow: ellipsis; }
   table.holdings .w-pl { width: 88px; }
 }
 .stat .v .two-line { display: block; font-size: .95rem; line-height: 1.4; }
+
+/* スマホ：銘柄別の表は全列を表示して横スクロール。銘柄名の列は左端に固定する */
+@media (max-width: 640px) {
+  table.holdings th.opt, table.holdings td.opt { display: table-cell; }
+  table.holdings { min-width: 560px; }
+  table.holdings.year { min-width: 820px; }
+  table.holdings th:first-child, table.holdings td:first-child {
+    position: sticky; left: 0; z-index: 1; width: 140px; max-width: 140px;
+    background: var(--surface); box-shadow: 1px 0 0 var(--border);
+  }
+  table.holdings thead th:first-child { background: var(--surface-2); }
+  table.holdings tbody tr:hover td:first-child { background: var(--surface-2); }
+}

@@ -409,7 +409,7 @@ function yearHoldingsTable(rows, opts) {
     for (const k of ["end", "unreal", "realized", "div", "perf"]) a[k] += r[k] ?? 0;
     return a;
   }, { end: 0, unreal: 0, realized: 0, div: 0, perf: 0 });
-  return `<div class="table-wrap"><table class="holdings">
+  return `<div class="table-wrap"><table class="holdings year">
     <thead><tr><th>銘柄</th><th class="n opt w-qty">数量</th><th class="n opt w-price">参考単価</th><th class="n opt w-price">${opts.priceLabel}</th>
       <th class="n opt w-val">${opts.endLabel}</th><th class="n w-pl">含み損益</th><th class="n opt w-pl">売却損益</th><th class="n w-div">配当金</th><th class="n w-perf">成績</th></tr></thead>
     <tbody>${tr}</tbody>
