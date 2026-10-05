@@ -290,7 +290,13 @@ function totalsOf(list) {
     return t;
   }, { start: 0, end: 0, buy: 0, sell: 0, div: 0, perf: 0, dayChange: 0 });
   total.price = total.perf - total.div;
-  total.rate = total.perf / (total.start + total.buy);
+  return withRate(total);
+}
+
+/** 元手＝年初評価額＋純投入（買付−売却）。売ったお金での買い直しは元手を増やさない */
+function withRate(total) {
+  total.capital = total.start + total.buy - total.sell;
+  total.rate = total.capital > 0 ? total.perf / total.capital : NaN;
   return total;
 }
 
@@ -362,12 +368,13 @@ function statTile(k, v, s = "") {
   return `<div class="stat"><div class="k">${k}</div><div class="v">${v}</div>${s ? `<div class="s">${s}</div>` : ""}</div>`;
 }
 
-function heroCard(label, t, extra) {
+function heroCard(label, t, extra, capitalBase = "年初") {
   return `<section class="card hero">
     <div>
       <p class="hero-label">${label}</p>
       <p class="hero-value ${tone(t.perf)}">${signed(t.perf)}<span style="font-size:.5em">円</span></p>
-      <p class="hero-sub muted">利回り <span class="${tone(t.perf)}">${pct(t.rate)}</span>（年初評価額＋買付額に対して）</p>
+      <p class="hero-sub muted">利回り <span class="${tone(t.perf)}">${pct(t.rate)}</span>（元手 ${yen(t.capital)} に対して）</p>
+      <p class="hero-sub muted">元手＝${capitalBase}評価額＋買付額−売却額</p>
     </div>
     <div class="stats">
       ${statTile("値動きによる損益", money(t.price), "売買損益を含む")}
@@ -581,18 +588,18 @@ function renderTotal() {
     b.held = !!now && isHeld(now);
     b.endQty = b.held ? now.endQty : 0;
   }
-  total.rate = total.perf / (total.start + total.buy);
+  withRate(total);
   const latest = reports[reports.length - 1]?.total;
   const yearRows = reports.slice().reverse().map((r) => `<tr>
       <td><button class="btn link" data-view="${r.year}">${r.year}年</button>${r.isCurrent ? '<span class="tag">途中</span>' : ""}</td>
-      <td class="n opt">${num(r.total.start)}</td><td class="n">${num(r.total.end)}</td>
+      <td class="n opt">${num(r.total.start)}</td><td class="n opt">${num(r.total.capital)}</td><td class="n">${num(r.total.end)}</td>
       <td class="n opt">${num(r.total.div)}</td><td class="n">${pct(r.total.rate)}</td>
       <td class="n"><strong>${money(r.total.perf)}</strong></td></tr>`).join("");
   return `
     ${heroCard(`通算の成績（${years()[0]}年〜）`, total,
-      `${statTile("現在の評価額", yen(latest?.end ?? 0), `前日比 ${signed(latest?.dayChange ?? 0)}円`)}`)}
+      `${statTile("現在の評価額", yen(latest?.end ?? 0), `前日比 ${signed(latest?.dayChange ?? 0)}円`)}`, `${years()[0]}年初の`)}
     <section class="card"><h2>年ごとの成績</h2><div class="table-wrap"><table>
-      <thead><tr><th>年</th><th class="n opt">年初評価額</th><th class="n">年末(現在)評価額</th><th class="n opt">配当金</th><th class="n">利回り</th><th class="n">成績</th></tr></thead>
+      <thead><tr><th>年</th><th class="n opt">年初評価額</th><th class="n opt">元手</th><th class="n">年末(現在)評価額</th><th class="n opt">配当金</th><th class="n">利回り</th><th class="n">成績</th></tr></thead>
       <tbody>${yearRows}</tbody></table></div></section>
     ${holdingsSections(Object.values(byCode).sort((a, b) => b.perf - a.perf), "銘柄別の通算成績", { values: false, soldNote: "現在は保有していない銘柄" })}`;
 }
