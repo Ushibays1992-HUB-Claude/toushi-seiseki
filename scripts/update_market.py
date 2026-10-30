@@ -145,10 +145,15 @@ def fetch_stock(code):
 
 def fetch_fund(code, isin):
     if code in MUFG_FUNDS:
-        res = json.loads(http_get(f"https://developer.am.mufg.jp/fund_information_latest/fund_cd/{MUFG_FUNDS[code]}"))
-        f = res["datasets"][0]
-        d = f["base_date"]
-        return {"price": f["nav"], "date": f"{d[:4]}-{d[4:6]}-{d[6:]}", "prevClose": f["nav"] - int(f["cmp_prev_day"])}
+        try:
+            res = json.loads(http_get(f"https://developer.am.mufg.jp/fund_information_latest/fund_cd/{MUFG_FUNDS[code]}"))
+            f = res["datasets"][0]
+            d = f["base_date"]
+            return {"price": f["nav"], "date": f"{d[:4]}-{d[4:6]}-{d[6:]}", "prevClose": f["nav"] - int(f["cmp_prev_day"])}
+        except Exception as e:  # noqa: BLE001  三菱UFJ AMはGitHubのサーバーからだと403になることがある
+            if not isin:
+                raise
+            print(f"{code}: MUFG failed ({e}), using 投資信託協会")
     if isin:  # 投資信託協会のCSV（全ファンド共通）
         raw = http_get(f"https://toushin-lib.fwg.ne.jp/FdsWeb/FDST030000/csv-file-download?isinCd={isin}&associFundCd={code}")
         rows = [r for r in csv.reader(io.StringIO(raw.decode("cp932"))) if r and r[0][:1].isdigit()]
