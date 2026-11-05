@@ -1,10 +1,10 @@
 {
- "updatedAt": "2026-11-05T04:22+09:00",
+ "updatedAt": "2026-11-06T04:29+09:00",
  "prices": {
   "0331418A": {
-   "price": 37260,
-   "date": "2026-11-04",
-   "prevClose": 37188,
+   "price": 37729,
+   "date": "2026-11-05",
+   "prevClose": 37260,
    "suspect": false
   },
   "1497": {
@@ -50,9 +50,9 @@
    "suspect": false
   },
   "9202": {
-   "price": 3075.0,
-   "date": "2026-11-02",
-   "prevClose": 3043.0,
+   "price": 3163.0,
+   "date": "2026-11-04",
+   "prevClose": 3075.0,
    "suspect": false
   },
   "2633": {
@@ -92,15 +92,15 @@
    "suspect": false
   },
   "2432": {
-   "price": 2558.0,
-   "date": "2026-11-02",
-   "prevClose": 2553.5,
+   "price": 2578.5,
+   "date": "2026-11-04",
+   "prevClose": 2558.0,
    "suspect": false
   },
   "618A": {
-   "price": 1881.0,
-   "date": "2026-11-02",
-   "prevClose": 1990.0,
+   "price": 1915.0,
+   "date": "2026-11-04",
+   "prevClose": 1881.0,
    "suspect": false
   },
   "2845": {
