@@ -1,112 +1,112 @@
 {
- "updatedAt": "2026-11-20T04:57+09:00",
+ "updatedAt": "2026-11-21T04:37+09:00",
  "prices": {
   "0331418A": {
-   "price": 36259,
-   "date": "2026-11-19",
-   "prevClose": 36440,
+   "price": 35574,
+   "date": "2026-11-20",
+   "prevClose": 36259,
    "suspect": false
   },
   "1497": {
-   "price": 1660.0,
-   "date": "2026-11-18",
+   "price": 1659.0,
+   "date": "2026-11-19",
    "prevClose": 1660.0,
    "suspect": false
   },
   "2559": {
-   "price": 2841.0,
-   "date": "2026-11-18",
-   "prevClose": 2858.0,
+   "price": 2840.0,
+   "date": "2026-11-19",
+   "prevClose": 2841.0,
    "suspect": false
   },
   "1545": {
-   "price": 218.5,
-   "date": "2026-11-18",
-   "prevClose": 218.7,
+   "price": 221.3,
+   "date": "2026-11-19",
+   "prevClose": 218.5,
    "suspect": false
   },
   "2562": {
-   "price": 3511.0,
-   "date": "2026-11-18",
-   "prevClose": 3549.0,
+   "price": 3526.0,
+   "date": "2026-11-19",
+   "prevClose": 3511.0,
    "suspect": false
   },
   "1658": {
-   "price": 3834.0,
-   "date": "2026-11-18",
-   "prevClose": 3801.0,
+   "price": 3790.0,
+   "date": "2026-11-19",
+   "prevClose": 3834.0,
    "suspect": false
   },
   "2529": {
-   "price": 2318.0,
-   "date": "2026-11-18",
-   "prevClose": 2325.0,
+   "price": 2307.0,
+   "date": "2026-11-19",
+   "prevClose": 2318.0,
    "suspect": false
   },
   "1681": {
-   "price": 2987.0,
-   "date": "2026-11-18",
-   "prevClose": 2953.0,
+   "price": 2917.0,
+   "date": "2026-11-19",
+   "prevClose": 2987.0,
    "suspect": false
   },
   "9202": {
-   "price": 3312.0,
-   "date": "2026-11-18",
-   "prevClose": 3357.0,
+   "price": 3300.0,
+   "date": "2026-11-19",
+   "prevClose": 3312.0,
    "suspect": false
   },
   "2633": {
-   "price": 541.1,
-   "date": "2026-11-18",
-   "prevClose": 544.2,
+   "price": 542.9,
+   "date": "2026-11-19",
+   "prevClose": 541.1,
    "suspect": false
   },
   "1306": {
-   "price": 401.9,
-   "date": "2026-11-18",
-   "prevClose": 404.5,
+   "price": 402.2,
+   "date": "2026-11-19",
+   "prevClose": 401.9,
    "suspect": false
   },
   "1489": {
-   "price": 3499.0,
-   "date": "2026-11-18",
-   "prevClose": 3519.0,
+   "price": 3474.0,
+   "date": "2026-11-19",
+   "prevClose": 3499.0,
    "suspect": false
   },
   "2515": {
-   "price": 1621.0,
-   "date": "2026-11-18",
-   "prevClose": 1633.0,
+   "price": 1630.0,
+   "date": "2026-11-19",
+   "prevClose": 1621.0,
    "suspect": false
   },
   "2563": {
-   "price": 386.9,
-   "date": "2026-11-18",
-   "prevClose": 389.0,
+   "price": 387.9,
+   "date": "2026-11-19",
+   "prevClose": 386.9,
    "suspect": false
   },
   "1326": {
-   "price": 55110.0,
-   "date": "2026-11-18",
-   "prevClose": 56520.0,
+   "price": 54540.0,
+   "date": "2026-11-19",
+   "prevClose": 55110.0,
    "suspect": false
   },
   "2432": {
-   "price": 2621.0,
-   "date": "2026-11-18",
-   "prevClose": 2659.0,
+   "price": 2638.0,
+   "date": "2026-11-19",
+   "prevClose": 2621.0,
    "suspect": false
   },
   "618A": {
-   "price": 1708.0,
-   "date": "2026-11-18",
-   "prevClose": 1862.0,
+   "price": 1694.0,
+   "date": "2026-11-19",
+   "prevClose": 1708.0,
    "suspect": false
   },
   "2845": {
-   "price": 3240.0,
-   "date": "2026-11-18",
-   "prevClose": 3244.0,
+   "price": 3277.0,
+   "date": "2026-11-19",
+   "prevClose": 3240.0,
    "suspect": false
   }
  }
